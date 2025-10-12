@@ -79,10 +79,9 @@ export async function incrementUsage(userId, actionType) {
 /**
  * Create Stripe checkout session
  */
-export async function createCheckoutSession(userId, tierId, billingCycle = 'monthly') {
+export async function createCheckoutSession(tierId, billingCycle = 'monthly') {
   const { data, error } = await supabase.functions.invoke('create-checkout-session', {
     body: {
-      userId,
       tierId,
       billingCycle
     }
