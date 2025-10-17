@@ -2,13 +2,17 @@
  * @license
  * SPDX-License-Identifier: Apache-2.0
 */
-import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Link, useLocation, useNavigate } from 'react-router-dom'
 import { AuthProvider, useAuth } from '../contexts/AuthContext'
 import Auth from './Auth'
 import App from './App'
+import DemoMode from './DemoMode'
 import PricingPage from './PricingPage'
 import SubscriptionPage from './SubscriptionPage'
+import Gallery from './Gallery'
 import UsageLimitBanner from './UsageLimitBanner'
+import WelcomeTutorial from './Onboarding/WelcomeTutorial'
+import CookieConsent from './Legal/CookieConsent'
 
 function Navigation() {
   const { signOut } = useAuth()
@@ -20,6 +24,9 @@ function Navigation() {
         <Link to="/">📸 GemBooth</Link>
       </div>
       <div className="navLinks">
+        <Link to="/gallery" className={location.pathname === '/gallery' ? 'active' : ''}>
+          Gallery
+        </Link>
         <Link to="/pricing" className={location.pathname === '/pricing' ? 'active' : ''}>
           Pricing
         </Link>
@@ -36,6 +43,8 @@ function Navigation() {
 
 function AppContent() {
   const { user, loading } = useAuth()
+  const location = useLocation()
+  const navigate = useNavigate()
 
   if (loading) {
     return (
@@ -46,6 +55,17 @@ function AppContent() {
     )
   }
 
+  // Handle demo mode route
+  if (!user && location.pathname === '/demo') {
+    return <DemoMode onSignUpClick={() => navigate('/signup')} />
+  }
+
+  // Handle auth routes (login, signup)
+  if (!user && (location.pathname === '/login' || location.pathname === '/signup')) {
+    return <Auth initialMode={location.pathname === '/signup' ? 'signup' : 'login'} />
+  }
+
+  // Default: show auth if not logged in
   if (!user) {
     return <Auth />
   }
@@ -56,6 +76,7 @@ function AppContent() {
       <UsageLimitBanner />
       <Routes>
         <Route path="/" element={<App />} />
+        <Route path="/gallery" element={<Gallery />} />
         <Route path="/pricing" element={<PricingPage />} />
         <Route path="/subscription" element={<SubscriptionPage />} />
         <Route path="/subscription/success" element={<SubscriptionSuccess />} />
@@ -99,7 +120,9 @@ export default function AppWithAuth() {
   return (
     <BrowserRouter>
       <AuthProvider>
+        <WelcomeTutorial />
         <AppContent />
+        <CookieConsent />
       </AuthProvider>
     </BrowserRouter>
   )
