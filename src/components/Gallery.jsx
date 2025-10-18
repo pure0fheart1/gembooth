@@ -10,9 +10,11 @@ import '../styles/Gallery.css'
 
 export default function Gallery() {
   const { user } = useAuth()
-  const [activeTab, setActiveTab] = useState('photos') // 'photos' or 'gifs'
+  const [activeTab, setActiveTab] = useState('photos') // 'photos', 'gifs', 'generated', or 'whiteboards'
   const [photos, setPhotos] = useState([])
   const [gifs, setGifs] = useState([])
+  const [generatedImages, setGeneratedImages] = useState([])
+  const [whiteboards, setWhiteboards] = useState([])
   const [loading, setLoading] = useState(true)
   const [selectedItem, setSelectedItem] = useState(null) // For modal
   const [deleting, setDeleting] = useState(null)
@@ -44,6 +46,36 @@ export default function Gallery() {
         .order('created_at', { ascending: false })
 
       if (gifsError) throw gifsError
+
+      // Fetch generated images
+      const { data: generatedData, error: generatedError } = await supabase
+        .from('generated_images')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+
+      if (generatedError) {
+        console.error('Error fetching generated images:', generatedError)
+        // Don't throw - table might not exist yet
+        setGeneratedImages([])
+      } else {
+        setGeneratedImages(generatedData || [])
+      }
+
+      // Fetch whiteboards
+      const { data: whiteboardsData, error: whiteboardsError } = await supabase
+        .from('whiteboards')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+
+      if (whiteboardsError) {
+        console.error('Error fetching whiteboards:', whiteboardsError)
+        // Don't throw - table might not exist yet
+        setWhiteboards([])
+      } else {
+        setWhiteboards(whiteboardsData || [])
+      }
 
       setPhotos(photosData || [])
       setGifs(gifsData || [])
@@ -99,6 +131,38 @@ export default function Gallery() {
 
         // Update local state
         setGifs(gifs.filter(g => g.id !== id))
+      } else if (type === 'generated') {
+        // Delete from database
+        const { error: dbError } = await supabase
+          .from('generated_images')
+          .delete()
+          .eq('id', id)
+          .eq('user_id', user.id)
+
+        if (dbError) throw dbError
+
+        // Delete from storage
+        const imageFile = `${user.id}/${id}.jpg`
+        await supabase.storage.from('user-photos').remove([imageFile])
+
+        // Update local state
+        setGeneratedImages(generatedImages.filter(g => g.id !== id))
+      } else if (type === 'whiteboard') {
+        // Delete from database
+        const { error: dbError } = await supabase
+          .from('whiteboards')
+          .delete()
+          .eq('id', id)
+          .eq('user_id', user.id)
+
+        if (dbError) throw dbError
+
+        // Delete from storage
+        const whiteboardFile = `${user.id}/whiteboards/${id}.png`
+        await supabase.storage.from('user-photos').remove([whiteboardFile])
+
+        // Update local state
+        setWhiteboards(whiteboards.filter(w => w.id !== id))
       }
 
       // Close modal if the deleted item was open
@@ -161,7 +225,9 @@ export default function Gallery() {
 
   const hasPhotos = photos.length > 0
   const hasGifs = gifs.length > 0
-  const isEmpty = !hasPhotos && !hasGifs
+  const hasGeneratedImages = generatedImages.length > 0
+  const hasWhiteboards = whiteboards.length > 0
+  const isEmpty = !hasPhotos && !hasGifs && !hasGeneratedImages && !hasWhiteboards
 
   return (
     <div className="galleryPage">
@@ -189,6 +255,18 @@ export default function Gallery() {
                 onClick={() => setActiveTab('gifs')}
               >
                 🎬 GIFs ({gifs.length})
+              </button>
+              <button
+                className={`tabButton ${activeTab === 'generated' ? 'active' : ''}`}
+                onClick={() => setActiveTab('generated')}
+              >
+                🎨 Generated ({generatedImages.length})
+              </button>
+              <button
+                className={`tabButton ${activeTab === 'whiteboards' ? 'active' : ''}`}
+                onClick={() => setActiveTab('whiteboards')}
+              >
+                ✏️ Whiteboards ({whiteboards.length})
               </button>
             </div>
 
@@ -269,6 +347,84 @@ export default function Gallery() {
                 ))}
               </div>
             )}
+
+            {activeTab === 'generated' && (
+              <div className="galleryGrid">
+                {generatedImages.map(image => (
+                  <div key={image.id} className="galleryItem">
+                    <div
+                      className="galleryItemImage"
+                      onClick={() => setSelectedItem({ ...image, type: 'generated' })}
+                    >
+                      <img src={image.image_url} alt="Generated image" />
+                      <div className="galleryItemOverlay">
+                        <span className="viewLabel">Click to view</span>
+                      </div>
+                    </div>
+                    <div className="galleryItemInfo">
+                      <div className="galleryItemMode">🎨 AI Generated</div>
+                      <div className="galleryItemDate">{formatDate(image.created_at)}</div>
+                    </div>
+                    <div className="galleryItemActions">
+                      <button
+                        className="iconButton"
+                        onClick={() => handleDownload(image.image_url, `generated-${image.id}.jpg`)}
+                        title="Download"
+                      >
+                        ⬇️
+                      </button>
+                      <button
+                        className="iconButton deleteButton"
+                        onClick={() => handleDelete(image.id, 'generated')}
+                        disabled={deleting === image.id}
+                        title="Delete"
+                      >
+                        {deleting === image.id ? '⏳' : '🗑️'}
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {activeTab === 'whiteboards' && (
+              <div className="galleryGrid">
+                {whiteboards.map(whiteboard => (
+                  <div key={whiteboard.id} className="galleryItem">
+                    <div
+                      className="galleryItemImage"
+                      onClick={() => setSelectedItem({ ...whiteboard, type: 'whiteboard' })}
+                    >
+                      <img src={whiteboard.image_url} alt="Whiteboard" />
+                      <div className="galleryItemOverlay">
+                        <span className="viewLabel">Click to view</span>
+                      </div>
+                    </div>
+                    <div className="galleryItemInfo">
+                      <div className="galleryItemMode">✏️ Whiteboard</div>
+                      <div className="galleryItemDate">{formatDate(whiteboard.created_at)}</div>
+                    </div>
+                    <div className="galleryItemActions">
+                      <button
+                        className="iconButton"
+                        onClick={() => handleDownload(whiteboard.image_url, `whiteboard-${whiteboard.id}.png`)}
+                        title="Download"
+                      >
+                        ⬇️
+                      </button>
+                      <button
+                        className="iconButton deleteButton"
+                        onClick={() => handleDelete(whiteboard.id, 'whiteboard')}
+                        disabled={deleting === whiteboard.id}
+                        title="Delete"
+                      >
+                        {deleting === whiteboard.id ? '⏳' : '🗑️'}
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </>
         )}
       </div>
@@ -296,8 +452,12 @@ export default function Gallery() {
                     <img src={selectedItem.output_image_url} alt="Processed" />
                   </div>
                 </div>
-              ) : (
+              ) : selectedItem.type === 'gif' ? (
                 <img src={selectedItem.gif_url} alt="GIF" />
+              ) : selectedItem.type === 'whiteboard' ? (
+                <img src={selectedItem.image_url} alt="Whiteboard" />
+              ) : (
+                <img src={selectedItem.image_url} alt="Generated image" />
               )}
             </div>
 
@@ -307,7 +467,11 @@ export default function Gallery() {
                 <span className="modalValue">
                   {selectedItem.type === 'photo'
                     ? getModeDisplay(selectedItem.mode)
-                    : '🎬 GIF'}
+                    : selectedItem.type === 'gif'
+                    ? '🎬 GIF'
+                    : selectedItem.type === 'whiteboard'
+                    ? '✏️ Whiteboard'
+                    : '🎨 AI Generated'}
                 </span>
               </div>
               {selectedItem.prompt && (
@@ -328,8 +492,11 @@ export default function Gallery() {
                 onClick={() => {
                   const url = selectedItem.type === 'photo'
                     ? selectedItem.output_image_url
-                    : selectedItem.gif_url
-                  const filename = `gembooth-${selectedItem.id}.${selectedItem.type === 'photo' ? 'jpg' : 'gif'}`
+                    : selectedItem.type === 'gif'
+                    ? selectedItem.gif_url
+                    : selectedItem.image_url
+                  const extension = selectedItem.type === 'gif' ? 'gif' : selectedItem.type === 'whiteboard' ? 'png' : 'jpg'
+                  const filename = `gembooth-${selectedItem.id}.${extension}`
                   handleDownload(url, filename)
                 }}
               >

@@ -9,10 +9,13 @@ import App from './App'
 import DemoMode from './DemoMode'
 import PricingPage from './PricingPage'
 import SubscriptionPage from './SubscriptionPage'
+import SettingsPage from './SettingsPage'
 import Gallery from './Gallery'
+import ImageGeneration from './ImageGeneration'
+import Whiteboard from './Whiteboard'
 import UsageLimitBanner from './UsageLimitBanner'
 import WelcomeTutorial from './Onboarding/WelcomeTutorial'
-import CookieConsent from './Legal/CookieConsent'
+// import CookieConsent from './Legal/CookieConsent' // Temporarily disabled due to ad blocker
 
 function Navigation() {
   const { signOut } = useAuth()
@@ -24,14 +27,23 @@ function Navigation() {
         <Link to="/">📸 GemBooth</Link>
       </div>
       <div className="navLinks">
+        <Link to="/generate" className={location.pathname === '/generate' ? 'active' : ''}>
+          Generate
+        </Link>
         <Link to="/gallery" className={location.pathname === '/gallery' ? 'active' : ''}>
           Gallery
+        </Link>
+        <Link to="/whiteboard" className={location.pathname === '/whiteboard' ? 'active' : ''}>
+          Whiteboard
         </Link>
         <Link to="/pricing" className={location.pathname === '/pricing' ? 'active' : ''}>
           Pricing
         </Link>
         <Link to="/subscription" className={location.pathname === '/subscription' ? 'active' : ''}>
           My Subscription
+        </Link>
+        <Link to="/settings" className={location.pathname === '/settings' ? 'active' : ''}>
+          Settings
         </Link>
         <button className="signOutButton" onClick={signOut}>
           Sign Out
@@ -76,9 +88,12 @@ function AppContent() {
       <UsageLimitBanner />
       <Routes>
         <Route path="/" element={<App />} />
+        <Route path="/generate" element={<ImageGeneration />} />
         <Route path="/gallery" element={<Gallery />} />
+        <Route path="/whiteboard" element={<Whiteboard />} />
         <Route path="/pricing" element={<PricingPage />} />
         <Route path="/subscription" element={<SubscriptionPage />} />
+        <Route path="/settings" element={<SettingsPage />} />
         <Route path="/subscription/success" element={<SubscriptionSuccess />} />
         <Route path="/subscription/cancel" element={<SubscriptionCancel />} />
       </Routes>
@@ -122,7 +137,7 @@ export default function AppWithAuth() {
       <AuthProvider>
         <WelcomeTutorial />
         <AppContent />
-        <CookieConsent />
+        {/* <CookieConsent /> */}
       </AuthProvider>
     </BrowserRouter>
   )

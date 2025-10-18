@@ -2,8 +2,8 @@
 
 .galleryPage {
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  padding: 2rem 1rem;
+  background: #000;
+  padding: 6rem 1rem 2rem 1rem;
 }
 
 .galleryContainer {
@@ -25,23 +25,24 @@
   color: white;
   font-size: 1.2rem;
   padding: 3rem;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(10px);
   border-radius: 16px;
   margin: 2rem auto;
   max-width: 400px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 /* Empty State */
 .emptyGallery {
   text-align: center;
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(10px);
   border-radius: 20px;
   padding: 4rem 2rem;
   max-width: 500px;
   margin: 2rem auto;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .emptyIcon {
@@ -50,12 +51,12 @@
 }
 
 .emptyGallery h2 {
-  color: #333;
+  color: #fff;
   margin-bottom: 0.5rem;
 }
 
 .emptyGallery p {
-  color: #666;
+  color: rgba(255, 255, 255, 0.8);
   margin-bottom: 2rem;
   font-size: 1.1rem;
 }
@@ -66,12 +67,13 @@
   gap: 1rem;
   justify-content: center;
   margin-bottom: 2rem;
+  flex-wrap: wrap;
 }
 
 .tabButton {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.08);
   backdrop-filter: blur(10px);
-  border: 2px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   color: white;
   padding: 0.75rem 2rem;
   border-radius: 30px;
@@ -82,14 +84,15 @@
 }
 
 .tabButton:hover {
-  background: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.12);
   transform: translateY(-2px);
 }
 
 .tabButton.active {
-  background: white;
-  color: #667eea;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
 }
 
 /* Gallery Grid */
@@ -102,16 +105,17 @@
 
 /* Gallery Items */
 .galleryItem {
-  background: white;
+  background: rgba(255, 255, 255, 0.05);
   border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .galleryItem:hover {
   transform: translateY(-5px);
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+  border-color: rgba(255, 255, 255, 0.2);
 }
 
 .galleryItemImage {
@@ -120,7 +124,7 @@
   aspect-ratio: 1;
   overflow: hidden;
   cursor: pointer;
-  background: #f0f0f0;
+  background: rgba(255, 255, 255, 0.03);
 }
 
 .galleryItemImage img {
@@ -164,13 +168,13 @@
 
 .galleryItemMode {
   font-weight: 600;
-  color: #333;
+  color: #fff;
   margin-bottom: 0.25rem;
 }
 
 .galleryItemDate {
   font-size: 0.875rem;
-  color: #666;
+  color: rgba(255, 255, 255, 0.6);
 }
 
 .galleryItemActions {
@@ -181,8 +185,8 @@
 
 .iconButton {
   flex: 1;
-  background: #f0f0f0;
-  border: none;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   padding: 0.75rem;
   border-radius: 8px;
   font-size: 1.2rem;
@@ -191,7 +195,7 @@
 }
 
 .iconButton:hover {
-  background: #e0e0e0;
+  background: rgba(255, 255, 255, 0.15);
   transform: scale(1.05);
 }
 
@@ -202,11 +206,12 @@
 }
 
 .deleteButton {
-  background: #fee;
+  background: rgba(255, 68, 68, 0.2);
+  border-color: rgba(255, 68, 68, 0.3);
 }
 
 .deleteButton:hover:not(:disabled) {
-  background: #fdd;
+  background: rgba(255, 68, 68, 0.3);
 }
 
 /* Modal Styles */
@@ -235,7 +240,7 @@
 }
 
 .galleryModalContent {
-  background: white;
+  background: #1a1a1a;
   border-radius: 20px;
   max-width: 1000px;
   width: 100%;
@@ -243,6 +248,7 @@
   overflow-y: auto;
   position: relative;
   animation: slideUp 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 @keyframes slideUp {
@@ -282,7 +288,7 @@
 
 .galleryModalImage {
   padding: 2rem;
-  background: #f5f5f5;
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .galleryModalImage img {
@@ -301,7 +307,7 @@
 
 .modalComparisonItem h3 {
   text-align: center;
-  color: #333;
+  color: #fff;
   margin-bottom: 1rem;
   font-size: 1.2rem;
 }
@@ -314,7 +320,7 @@
 
 .galleryModalInfo {
   padding: 1.5rem 2rem;
-  border-top: 1px solid #eee;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .modalInfoRow {
@@ -325,12 +331,12 @@
 
 .modalLabel {
   font-weight: 600;
-  color: #666;
+  color: rgba(255, 255, 255, 0.6);
   min-width: 80px;
 }
 
 .modalValue {
-  color: #333;
+  color: #fff;
   flex: 1;
 }
 
@@ -338,7 +344,7 @@
   display: flex;
   gap: 1rem;
   padding: 1.5rem 2rem;
-  border-top: 1px solid #eee;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .galleryModalActions .button {
@@ -386,13 +392,9 @@
     gap: 1rem;
   }
 
-  .galleryTabs {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
   .tabButton {
-    width: 100%;
+    font-size: 0.9rem;
+    padding: 0.6rem 1.2rem;
   }
 
   .modalPhotoComparison {
