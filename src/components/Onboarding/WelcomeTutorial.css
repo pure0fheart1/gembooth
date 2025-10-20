@@ -1,0 +1,182 @@
+/* Tutorial Overlay */
+.tutorialOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  animation: fadeIn 0.3s ease-out;
+  padding: 20px;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.tutorialModal {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  border: 2px solid #00ff88;
+  border-radius: 20px;
+  padding: 40px;
+  max-width: 500px;
+  width: 100%;
+  position: relative;
+  animation: slideUp 0.4s ease-out;
+  box-shadow: 0 20px 60px rgba(0, 255, 136, 0.2);
+}
+
+@keyframes slideUp {
+  from { transform: translateY(30px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.tutorialClose {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: transparent;
+  border: none;
+  color: #888;
+  font-size: 24px;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s;
+}
+
+.tutorialClose:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  transform: rotate(90deg);
+}
+
+.tutorialContent {
+  text-align: center;
+  margin-bottom: 30px;
+  min-height: 180px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.tutorialEmoji {
+  font-size: 64px;
+  margin-bottom: 20px;
+  animation: bounceIn 0.6s ease-out;
+}
+
+@keyframes bounceIn {
+  0% { transform: scale(0); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+.tutorialContent h2 {
+  color: #00ff88;
+  font-size: 28px;
+  margin: 0 0 15px 0;
+  font-weight: 700;
+}
+
+.tutorialContent p {
+  color: #ccc;
+  font-size: 16px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.tutorialProgress {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+.tutorialDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s;
+  padding: 0;
+}
+
+.tutorialDot.active {
+  background: #00ff88;
+  width: 30px;
+  border-radius: 5px;
+}
+
+.tutorialDot.completed {
+  background: rgba(0, 255, 136, 0.4);
+}
+
+.tutorialActions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+}
+
+.tutorialNav {
+  display: flex;
+  gap: 10px;
+}
+
+.tutorialBtn {
+  padding: 12px 24px;
+  border-radius: 10px;
+  border: 2px solid transparent;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.tutorialBtn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.tutorialBtn.primary {
+  background: linear-gradient(135deg, #00ff88 0%, #00cc6a 100%);
+  color: #000;
+  border-color: #00ff88;
+}
+
+.tutorialBtn.primary:hover {
+  background: linear-gradient(135deg, #00cc6a 0%, #00ff88 100%);
+  box-shadow: 0 5px 20px rgba(0, 255, 136, 0.4);
+}
+
+.tutorialBtn.secondary {
+  background: transparent;
+  color: #888;
+}
+
+@media (max-width: 600px) {
+  .tutorialModal { padding: 30px 20px; }
+  .tutorialContent h2 { font-size: 24px; }
+  .tutorialContent p { font-size: 14px; }
+  .tutorialEmoji { font-size: 48px; }
+  .tutorialActions { flex-direction: column-reverse; }
+  .tutorialNav { width: 100%; }
+  .tutorialBtn { flex: 1; padding: 10px 20px; font-size: 14px; }
+}

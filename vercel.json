@@ -4,5 +4,10 @@
       "maxDuration": 60
     }
   },
-  "rewrites": []
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
 }

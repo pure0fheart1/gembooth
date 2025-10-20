@@ -492,6 +492,282 @@ Fixed the "Manage Subscription" button which was failing with "Failed to open su
 
 See `PORTAL_FIX_GUIDE.md` for complete technical details.
 
+### Stripe LIVE Mode Production Setup (October 2025)
+
+**Status: ✅ COMPLETE - Live payments working in production**
+
+Successfully configured and deployed Stripe LIVE mode for real payment processing. The checkout and subscription flows are fully functional with real credit cards.
+
+#### Critical Configuration Requirements
+
+**⚠️ MOST IMPORTANT:** All three locations MUST use matching Stripe keys from the SAME account:
+
+1. **Database Price IDs** (`subscription_tiers` table)
+2. **Supabase Edge Function Secrets**
+3. **Vercel Environment Variables** (frontend)
+
+If ANY of these three locations use keys from different Stripe accounts, checkout will fail with **"Edge Function returned a non-2xx status code"** error.
+
+#### Current LIVE Configuration
+
+**Stripe Account:** Ending in `...egbHNMaT`
+
+**Database (subscription_tiers table):**
+```sql
+-- Pro tier (AUD $9.99/month)
+stripe_price_id_monthly: price_1SJp5ZEG7Jir5vNmXcM7ARjA
+stripe_price_id_yearly: price_1SJp5ZEG7Jir5vNmOrXj1Fa6
+
+-- Premium tier (AUD $19.99/month)
+stripe_price_id_monthly: price_1SJp5aEG7Jir5vNm5g4i1LJA
+stripe_price_id_yearly: price_1SJp5aEG7Jir5vNmnVgXlpz1
+```
+
+**Supabase Edge Function Secrets:**
+```
+STRIPE_SECRET_KEY=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
+STRIPE_WEBHOOK_SECRET=whsec_xo9taTe3DoroZFxpCqLHDG4PyUIjEiYv
+```
+
+**Vercel Environment Variables:**
+```
+VITE_STRIPE_PUBLISHABLE_KEY=pk_live_51RpZ0mEG7Jir5vNmhMvGfIUT72zSqCJSvtDO9uPWwI4nnlPQtUZ8TAx3jzik8o7TwnRE189EcLNlDirwV0smdaWp00Yi4Ynu6N
+```
+
+**Stripe Webhook Endpoint (LIVE mode):**
+- URL: `https://cahdabrkluflhlwexqsc.supabase.co/functions/v1/stripe-webhook`
+- Events: `checkout.session.completed`, `customer.subscription.created`, `customer.subscription.updated`, `customer.subscription.deleted`, `invoice.payment_succeeded`, `invoice.payment_failed`
+- Signing Secret: `whsec_xo9taTe3DoroZFxpCqLHDG4PyUIjEiYv`
+
+#### Deployment Procedure
+
+When updating Stripe keys, you MUST follow ALL these steps in order:
+
+```bash
+# 1. Update Supabase Edge Function Secrets
+set SUPABASE_ACCESS_TOKEN=sbp_dc3c026c3c29d4172e78a4a1addd2494b557475c
+npx supabase secrets set STRIPE_SECRET_KEY=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 --project-ref cahdabrkluflhlwexqsc
+npx supabase secrets set STRIPE_WEBHOOK_SECRET=whsec_xo9taTe3DoroZFxpCqLHDG4PyUIjEiYv --project-ref cahdabrkluflhlwexqsc
+
+# 2. Redeploy ALL Edge Functions (they cache secrets!)
+npx supabase functions deploy --project-ref cahdabrkluflhlwexqsc
+
+# 3. Update Vercel environment variables via Dashboard
+# Go to: https://vercel.com/[your-project]/settings/environment-variables
+# Update VITE_STRIPE_PUBLISHABLE_KEY to pk_live_...
+
+# 4. Redeploy frontend
+vercel --prod
+```
+
+**🚨 CRITICAL:** Edge Functions cache their secrets at deployment time. Simply updating secrets in Supabase Dashboard does NOT update running functions. You MUST redeploy after changing secrets!
+
+#### Common Errors and Solutions
+
+**Error: "Edge Function returned a non-2xx status code" (400)**
+
+**Root Cause:** Mismatched Stripe keys across the three configuration locations.
+
+**Debugging Steps:**
+1. Check Supabase Edge Function Secrets:
+   - Go to: Supabase Dashboard → Settings → Edge Function Secrets
+   - Click eye icon to view last characters of `STRIPE_SECRET_KEY`
+   - Verify it matches the account that owns the price IDs in database
+
+2. Verify database price IDs match the Stripe account:
+   ```sql
+   SELECT id, stripe_price_id_monthly FROM subscription_tiers WHERE id IN ('pro', 'premium');
+   ```
+
+3. Check which Stripe account owns these prices:
+   - Log into Stripe Dashboard → Products
+   - Search for the price IDs
+   - Note which account shows the prices
+
+4. Ensure all three locations use keys from the SAME account:
+   - Database prices → from Account X
+   - Supabase secrets → must be Account X keys
+   - Vercel env vars → must be Account X publishable key
+
+**Error: "Invalid price ID"**
+
+**Root Cause:** Price IDs in database belong to TEST mode, but you're using LIVE keys (or vice versa).
+
+**Solution:** Ensure price IDs have the correct prefix:
+- TEST mode prices: Start with `price_...` from test mode dashboard
+- LIVE mode prices: Start with `price_...` from live mode dashboard
+- Must create products/prices in the SAME mode as your API keys
+
+#### Testing in Production
+
+**⚠️ WARNING:** Live mode charges REAL credit cards!
+
+**Test Procedure:**
+1. Visit production URL: https://gembooth-7wghhotsa-jamie-lees-projects-f8b674ea.vercel.app/pricing
+2. Log in with a test user account
+3. Click "Upgrade Now" on Pro plan
+4. Use a REAL credit card (will be charged!)
+5. Complete checkout
+6. Verify:
+   - Redirects to success page
+   - Webhook appears in Stripe Dashboard
+   - Database updated with subscription
+   - User can access Pro features
+
+**Stripe Dashboard Verification:**
+- Payments: https://dashboard.stripe.com/payments
+- Webhooks: https://dashboard.stripe.com/webhooks
+- Customers: https://dashboard.stripe.com/customers
+
+#### Files Reference
+
+- **Live keys stored in:** `.env.local.live` (backup reference)
+- **Active keys in:** `.env.local` (local development)
+- **Production keys in:** Vercel Dashboard environment variables
+- **Backend keys in:** Supabase Dashboard Edge Function Secrets
+
+### FitCheck Virtual Try-On UI/UX Redesign (October 2025)
+
+**Status: ✅ COMPLETE - Professional interface redesign**
+
+Completely transformed the FitCheck page from a sloppy layout to a beautifully structured, professional interface matching the Gembooth design system.
+
+#### Major Improvements
+
+**1. Main Layout Structure** (`FitCheckApp.jsx`)
+- Added sticky page header with gradient title and dynamic subtitle
+- Reorganized into proper grid layout: canvas (left) + sidebar (right)
+- Canvas section wrapped in frosted glass container with proper spacing
+- Sidebar is sticky on desktop, transforms to collapsible bottom sheet on mobile
+- Improved visual hierarchy with clear section separation
+- Better error display with icons and styled containers
+
+**2. Start Screen Redesign** (`StartScreen.jsx`)
+- Professional two-column layout:
+  - **Left**: Hero content with badge, heading, description, upload button
+  - **Right**: Interactive demo with before/after comparison slider
+- Added "✨ AI-Powered Virtual Try-On" badge for visual interest
+- Large, bold typography for heading ("See Yourself in Any Outfit")
+- Gradient purple upload button with hover effects and icon
+- Visual hints with emojis for better UX (📸, 😊)
+- Elegant gradient divider between sections
+- Improved error display with icon and styled container
+- Professional caption under demo ("Drag to see the transformation")
+
+**3. Design System Consistency**
+- Dark theme with solid black background (#000)
+- Frosted glass aesthetic throughout (rgba backgrounds with backdrop-filter blur)
+- Purple gradient accents (#667eea → #764ba2) for CTAs and highlights
+- Proper spacing following 8px grid system
+- Consistent border styling (rgba(255, 255, 255, 0.1))
+- Professional shadows for depth and elevation
+- Smooth transitions (0.2s-0.3s) for all interactive elements
+
+**4. Responsive Design**
+- Mobile-first approach with breakpoints at 768px and 1024px
+- Sidebar transforms to collapsible bottom sheet on mobile/tablet
+- Adjusted typography scales for smaller screens
+- Touch-friendly button sizes (minimum 44px tap targets)
+- Proper spacing adjustments for mobile views
+- Grid collapses to single column on smaller screens
+
+**5. Visual Polish**
+- Custom scrollbars matching dark theme
+- Professional button states (default, hover, active, disabled)
+- Smooth animations with proper easing functions
+- Loading overlays with backdrop blur
+- Empty states with clear messaging
+- Accessibility improvements with ARIA labels
+- Focus states for keyboard navigation
+
+#### Key CSS Classes
+
+**Page Structure:**
+- `.fitCheckPage` - Main container with black background
+- `.fitCheckPageHeader` - Sticky header with gradient title
+- `.fitCheckPageContent` - Main content area with proper padding
+- `.fitCheckCenteredContainer` - Centered container for start screen
+- `.fitCheckMainLayout` - Grid layout for canvas + sidebar
+
+**Start Screen:**
+- `.fitCheckStartScreen` - Two-column grid layout
+- `.fitCheckStartLeft` / `.fitCheckStartRight` - Column containers
+- `.fitCheckStartBadge` - Purple badge with border
+- `.fitCheckStartHeading` - Large bold heading
+- `.fitCheckUploadButton` - Gradient purple CTA button
+- `.fitCheckStartHints` - Hint text container with emojis
+- `.fitCheckCompareImage` - Demo image with rounded corners
+
+**Layout Components:**
+- `.fitCheckCanvasSection` - Canvas container with frosted glass
+- `.fitCheckSidebarSection` - Sticky sidebar with frosted glass
+- `.fitCheckSidebarContent` - Sidebar inner content with scroll
+- `.fitCheckMobileToggle` - Mobile collapse/expand button
+
+#### Files Modified
+
+1. **FitCheckApp.jsx** - Complete layout restructure with new components
+2. **StartScreen.jsx** - Professional hero section with two-column layout
+3. **FitCheck.css** - Comprehensive styling update (~200 new lines)
+   - New page structure styles
+   - Start screen components
+   - Responsive breakpoints
+   - Animation improvements
+
+#### Design Patterns Used
+
+**Layout:**
+- CSS Grid for main layout (desktop: 2 columns, mobile: 1 column)
+- Flexbox for component internals
+- Sticky positioning for header and sidebar
+- Fixed positioning for mobile bottom sheet
+
+**Visual Effects:**
+- Gradient backgrounds for CTAs
+- Backdrop blur for frosted glass effect
+- Box shadows for depth (subtle to strong: 0-40px)
+- Smooth transitions (0.2s-0.3s ease)
+- Hover effects with transform and shadow changes
+
+**Typography:**
+- Heading: 3rem (desktop) → 2rem (mobile)
+- Body: 1.125rem (desktop) → 1rem (mobile)
+- Hint text: 0.875rem
+- Disclaimer: 0.75rem
+
+**Spacing:**
+- Large gaps: 4rem (desktop) → 2rem (mobile)
+- Medium gaps: 2rem → 1rem
+- Small gaps: 1rem → 0.5rem
+- Follows 8px grid system
+
+#### Before & After
+
+**Before:**
+- Cluttered, unorganized layout
+- Inconsistent spacing and alignment
+- Poor visual hierarchy
+- Generic, unstyled components
+- No clear sections or structure
+- Mobile layout broken
+
+**After:**
+- Clean, professional grid-based layout
+- Consistent spacing following design system
+- Clear visual hierarchy with sections
+- Beautifully styled components with frosted glass aesthetic
+- Proper responsive design with mobile bottom sheet
+- Matches Gembooth's visual language
+
+#### Testing
+
+Visit the FitCheck page at `/fit-check` route to see the transformation. The page now provides:
+- Professional first impression with hero section
+- Intuitive navigation and layout
+- Smooth, polished interactions
+- Consistent branding with main app
+- Excellent mobile experience
+
 ## Design System & Styling Guidelines
 
 ### Consistent Visual Language

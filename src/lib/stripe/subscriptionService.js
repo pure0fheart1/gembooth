@@ -80,7 +80,19 @@ export async function incrementUsage(userId, actionType) {
  * Create Stripe checkout session
  */
 export async function createCheckoutSession(tierId, billingCycle = 'monthly') {
+  // Get the current session to ensure we have auth token
+  const { data: { session } } = await supabase.auth.getSession()
+
+  if (!session) {
+    throw new Error('You must be logged in to subscribe')
+  }
+
+  console.log('Creating checkout with session:', session.user.id)
+
   const { data, error } = await supabase.functions.invoke('create-checkout-session', {
+    headers: {
+      Authorization: `Bearer ${session.access_token}`
+    },
     body: {
       tierId,
       billingCycle
@@ -92,31 +104,63 @@ export async function createCheckoutSession(tierId, billingCycle = 'monthly') {
     throw error || new Error('No session data returned')
   }
 
-  const stripe = await stripePromise
-  const { error: stripeError } = await stripe.redirectToCheckout({
-    sessionId: data.session.id
-  })
-
-  if (stripeError) {
-    console.error('Stripe redirect error:', stripeError)
-    throw stripeError
-  }
+  // Redirect directly to the Stripe checkout URL
+  window.location.href = data.session.url
 }
 
 /**
  * Create Stripe customer portal session
  */
 export async function createPortalSession(userId) {
-  const { data: { url }, error } = await supabase.functions.invoke('create-portal-session', {
+  console.log('[Portal] Starting portal session creation for user:', userId)
+
+  // Get the current session to ensure we have auth token
+  const { data: { session } } = await supabase.auth.getSession()
+
+  if (!session) {
+    console.error('[Portal] No session found')
+    throw new Error('You must be logged in to manage subscription')
+  }
+
+  console.log('[Portal] Session found, user:', session.user.id)
+  console.log('[Portal] Invoking Edge Function...')
+
+  const { data, error } = await supabase.functions.invoke('create-portal-session', {
+    headers: {
+      Authorization: `Bearer ${session.access_token}`
+    },
     body: { userId }
   })
 
+  console.log('[Portal] Edge Function response:', { data, error })
+
+  // Check for Supabase function invocation error
   if (error) {
-    console.error('Error creating portal session:', error)
-    throw error
+    console.error('[Portal] Supabase function error:', error)
+    throw new Error(error.message || 'Failed to invoke Edge Function')
   }
 
-  window.location.href = url
+  // Check if response exists
+  if (!data) {
+    console.error('[Portal] No data returned from Edge Function')
+    throw new Error('No response from portal service')
+  }
+
+  // Check if Edge Function returned an error in the data
+  if (data.error) {
+    console.error('[Portal] Edge Function returned error:', data.error)
+    throw new Error(data.error)
+  }
+
+  // Check if we have the portal URL
+  if (!data.url) {
+    console.error('[Portal] No portal URL in response:', data)
+    throw new Error('Portal URL not found in response')
+  }
+
+  console.log('[Portal] Redirecting to:', data.url)
+  // Redirect directly to the Stripe portal URL
+  window.location.href = data.url
 }
 
 /**

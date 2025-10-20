@@ -11,6 +11,7 @@ import imageData from '../lib/imageData'
 import modes from '../lib/modes'
 import EmptyState from './EmptyState'
 import BatchUpload from './BatchUpload'
+import CameraSettings from './CameraSettings'
 
 // Helper to determine empty state type
 const getEmptyStateType = (videoActive, activeMode, photos) => {
@@ -33,33 +34,6 @@ const canvas = document.createElement('canvas')
 const ctx = canvas.getContext('2d')
 const modeKeys = Object.keys(modes)
 
-// CSS filter approximations for live preview
-const filterPresets = {
-  renaissance: 'sepia(0.5) saturate(1.2) contrast(1.1) brightness(1.05)',
-  cartoon: 'saturate(1.8) brightness(1.15) contrast(1.2)',
-  statue: 'grayscale(1) contrast(1.3) brightness(1.1)',
-  banana: 'hue-rotate(30deg) saturate(2) brightness(1.2)',
-  '80s': 'saturate(1.6) brightness(1.1) contrast(1.15) hue-rotate(-10deg)',
-  '19century': 'sepia(0.8) contrast(0.85) brightness(0.95) saturate(0.7)',
-  anime: 'saturate(1.5) brightness(1.1) contrast(1.25)',
-  psychedelic: 'hue-rotate(90deg) saturate(2.5) contrast(1.2)',
-  '8bit': 'saturate(1.8) contrast(1.3) brightness(1.1)',
-  beard: 'contrast(1.05) saturate(1.05)',
-  comic: 'saturate(1.6) contrast(1.4) brightness(1.05)',
-  old: 'grayscale(0.6) sepia(0.3) contrast(0.9) brightness(0.95)',
-  filmnoir: 'grayscale(1) contrast(1.5) brightness(0.95)',
-  claymation: 'saturate(1.3) contrast(1.1) brightness(1.05)',
-  cyberpunk: 'hue-rotate(180deg) saturate(1.8) contrast(1.2) brightness(1.1)',
-  oilpainting: 'saturate(1.3) contrast(1.15) brightness(1.05)',
-  popart: 'saturate(2) contrast(1.5) brightness(1.1)',
-  zombie: 'sepia(0.3) hue-rotate(60deg) saturate(0.6) contrast(1.2) brightness(0.85)',
-  superhero: 'saturate(1.5) contrast(1.3) brightness(1.15)',
-  medievalknight: 'sepia(0.4) saturate(1.2) contrast(1.15)',
-  stainedglass: 'saturate(2) hue-rotate(30deg) contrast(1.2) brightness(1.1)',
-  watercolor: 'saturate(1.2) brightness(1.05) contrast(0.95) opacity(0.95)',
-  custom: 'saturate(1.1) contrast(1.05)'
-}
-
 export default function App({ isDemo = false, photoLimit = null }) {
   // Select actions based on mode
   const actions = isDemo ? demoActions : supabaseActions
@@ -69,6 +43,7 @@ export default function App({ isDemo = false, photoLimit = null }) {
   const gifInProgress = useStore.use.gifInProgress()
   const gifUrl = useStore.use.gifUrl()
   const favoriteModes = useStore.use.favoriteModes()
+  const customModes = useStore.use.customModes()
   const [videoActive, setVideoActive] = useState(false)
   const [didInitVideo, setDidInitVideo] = useState(false)
   const [focusedId, setFocusedId] = useState(null)
@@ -78,36 +53,66 @@ export default function App({ isDemo = false, photoLimit = null }) {
   const [showCustomPrompt, setShowCustomPrompt] = useState(false)
   const [photoError, setPhotoError] = useState(null)
   const [showBatchUpload, setShowBatchUpload] = useState(false)
-  const [previewEnabled, setPreviewEnabled] = useState(true)
   const videoRef = useRef(null)
+
+  // Camera settings state
+  const [showCameraSettings, setShowCameraSettings] = useState(false)
+  const [facingMode, setFacingMode] = useState('user')
+  const [timerDuration, setTimerDuration] = useState(0)
+  const [burstMode, setBurstMode] = useState(false)
+  const [countdown, setCountdown] = useState(null)
+  const [isTakingBurst, setIsTakingBurst] = useState(false)
+  const [burstProgress, setBurstProgress] = useState(null) // { current: 1, total: 5 }
+  const streamRef = useRef(null)
 
   // Destructure action methods
   const { deletePhoto, setMode, makeGif, hideGif, toggleFavorite, setCustomPrompt } = actions
 
-  // Load favorite modes on mount (only in authenticated mode)
+  // Load favorite modes and custom modes on mount (only in authenticated mode)
   useEffect(() => {
     if (!isDemo && actions.loadFavoriteModes) {
       actions.loadFavoriteModes()
     }
+    if (!isDemo && actions.loadCustomModes) {
+      actions.loadCustomModes()
+    }
   }, [isDemo, actions])
 
-  const startVideo = async () => {
-    setDidInitVideo(true)
-    const stream = await navigator.mediaDevices.getUserMedia({
-      video: {width: {ideal: 1920}, height: {ideal: 1080}},
-      audio: false,
-      facingMode: {ideal: 'user'}
-    })
-    setVideoActive(true)
-    videoRef.current.srcObject = stream
+  const startVideo = async (newFacingMode = facingMode) => {
+    try {
+      setDidInitVideo(true)
 
-    const {width, height} = stream.getVideoTracks()[0].getSettings()
-    const squareSize = Math.min(width, height)
-    canvas.width = squareSize
-    canvas.height = squareSize
+      // Stop existing stream if switching cameras
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach(track => track.stop())
+      }
+
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: {
+          width: {ideal: 1920},
+          height: {ideal: 1080},
+          facingMode: {ideal: newFacingMode}
+        },
+        audio: false
+      })
+
+      streamRef.current = stream
+      setVideoActive(true)
+      videoRef.current.srcObject = stream
+
+      const {width, height} = stream.getVideoTracks()[0].getSettings()
+      const squareSize = Math.min(width, height)
+      canvas.width = squareSize
+      canvas.height = squareSize
+    } catch (error) {
+      console.error('Error accessing camera:', error)
+      setPhotoError('Unable to access camera. Please check permissions.')
+      setDidInitVideo(false)
+    }
   }
 
-  const takePhoto = async () => {
+  // Immediate photo capture (internal function)
+  const capturePhoto = async () => {
     const video = videoRef.current
     const {videoWidth, videoHeight} = video
     const squareSize = canvas.width
@@ -117,18 +122,34 @@ export default function App({ isDemo = false, photoLimit = null }) {
 
     ctx.clearRect(0, 0, squareSize, squareSize)
     ctx.setTransform(1, 0, 0, 1, 0, 0)
-    ctx.scale(-1, 1)
-    ctx.drawImage(
-      video,
-      sourceX,
-      sourceY,
-      sourceSize,
-      sourceSize,
-      -squareSize,
-      0,
-      squareSize,
-      squareSize
-    )
+
+    // Only flip horizontally if using front camera
+    if (facingMode === 'user') {
+      ctx.scale(-1, 1)
+      ctx.drawImage(
+        video,
+        sourceX,
+        sourceY,
+        sourceSize,
+        sourceSize,
+        -squareSize,
+        0,
+        squareSize,
+        squareSize
+      )
+    } else {
+      ctx.drawImage(
+        video,
+        sourceX,
+        sourceY,
+        sourceSize,
+        sourceSize,
+        0,
+        0,
+        squareSize,
+        squareSize
+      )
+    }
 
     // Clear any previous errors
     setPhotoError(null)
@@ -138,11 +159,78 @@ export default function App({ isDemo = false, photoLimit = null }) {
     // Handle errors from demo mode
     if (result && result.error) {
       setPhotoError(result.error)
-      return
+      return false
     }
 
     setDidJustSnap(true)
     setTimeout(() => setDidJustSnap(false), 1000)
+    return true
+  }
+
+  // Timer countdown
+  const takePhotoWithTimer = async () => {
+    return new Promise((resolve) => {
+      let timeLeft = timerDuration
+      setCountdown(timeLeft)
+
+      const countdownInterval = setInterval(() => {
+        timeLeft -= 1
+        if (timeLeft > 0) {
+          setCountdown(timeLeft)
+        } else {
+          clearInterval(countdownInterval)
+          setCountdown(null)
+          capturePhoto().then(resolve)
+        }
+      }, 1000)
+    })
+  }
+
+  // Burst mode - take 5 photos with 2.5s intervals
+  const takeBurstPhotos = async () => {
+    setIsTakingBurst(true)
+    const totalPhotos = 5
+    const intervalMs = 2500
+
+    for (let i = 1; i <= totalPhotos; i++) {
+      setBurstProgress({ current: i, total: totalPhotos })
+
+      const success = await capturePhoto()
+
+      if (!success) {
+        // Stop burst if photo fails
+        break
+      }
+
+      // Wait before next photo (except after the last one)
+      if (i < totalPhotos) {
+        await new Promise(resolve => setTimeout(resolve, intervalMs))
+      }
+    }
+
+    setBurstProgress(null)
+    setIsTakingBurst(false)
+  }
+
+  // Main photo trigger - routes to appropriate method
+  const takePhoto = async () => {
+    // Prevent multiple burst sessions
+    if (isTakingBurst) return
+
+    // Burst mode
+    if (burstMode) {
+      await takeBurstPhotos()
+      return
+    }
+
+    // Timer mode
+    if (timerDuration > 0) {
+      await takePhotoWithTimer()
+      return
+    }
+
+    // Instant photo
+    await capturePhoto()
   }
 
   const handleRetryPhoto = useCallback(() => {
@@ -191,12 +279,36 @@ export default function App({ isDemo = false, photoLimit = null }) {
     return [...favoriteModeEntries, ...nonFavoriteModeEntries]
   }, [favoriteModes])
 
+  // Organize custom modes (favorites first, then rest)
+  const organizedCustomModes = useCallback(() => {
+    if (!customModes || !Array.isArray(customModes) || customModes.length === 0) return []
+    const favoriteCustom = customModes.filter(mode => mode && mode.is_favorite)
+    const nonFavoriteCustom = customModes.filter(mode => mode && !mode.is_favorite)
+    return [...favoriteCustom, ...nonFavoriteCustom]
+  }, [customModes])
+
   // Handle GIF creation with demo mode support
   const handleMakeGif = async () => {
     const result = await makeGif()
     if (result && result.error) {
       alert(result.error)
     }
+  }
+
+  // Camera settings handlers
+  const handleFacingModeChange = async (newMode) => {
+    setFacingMode(newMode)
+    if (videoActive) {
+      await startVideo(newMode)
+    }
+  }
+
+  const handleTimerChange = (duration) => {
+    setTimerDuration(duration)
+  }
+
+  const handleBurstModeChange = (enabled) => {
+    setBurstMode(enabled)
   }
 
   return (
@@ -241,20 +353,29 @@ export default function App({ isDemo = false, photoLimit = null }) {
           autoPlay
           playsInline
           disablePictureInPicture="true"
-          style={{
-            filter: previewEnabled && activeMode && filterPresets[activeMode]
-              ? filterPresets[activeMode]
-              : 'none',
-            transition: 'filter 0.3s ease'
-          }}
         />
         {didJustSnap && <div className="flash" />}
-        {previewEnabled && videoActive && activeMode && (
-          <div className="previewIndicator">
-            <span className="icon">visibility</span>
-            <span>Live Preview</span>
+
+        {/* Countdown overlay */}
+        {countdown !== null && (
+          <div className="countdownOverlay">
+            <div className="countdownNumber">{countdown}</div>
+            <div className="countdownText">Get ready...</div>
           </div>
         )}
+
+        {/* Burst mode progress */}
+        {burstProgress && (
+          <div className="burstOverlay">
+            <div className="burstProgress">
+              <span className="icon">burst_mode</span>
+              <div className="burstText">
+                Photo {burstProgress.current} of {burstProgress.total}
+              </div>
+            </div>
+          </div>
+        )}
+
         {!videoActive && (
           <button className="startButton" onClick={startVideo}>
             <h1>📸 GemBooth</h1>
@@ -264,18 +385,22 @@ export default function App({ isDemo = false, photoLimit = null }) {
 
         {videoActive && (
           <div className="videoControls">
-            <button onClick={takePhoto} className="shutter">
-              <span className="icon">camera</span>
+            <button
+              className="settingsBtn"
+              onClick={() => setShowCameraSettings(true)}
+              title="Camera Settings"
+              aria-label="Open camera settings"
+            >
+              <span className="icon">settings</span>
             </button>
 
             <button
-              onClick={() => setPreviewEnabled(!previewEnabled)}
-              className={c('previewToggle', {active: previewEnabled})}
-              title={previewEnabled ? 'Disable live preview' : 'Enable live preview'}
-              aria-label={previewEnabled ? 'Disable live preview' : 'Enable live preview'}
+              onClick={takePhoto}
+              className="shutter"
+              disabled={isTakingBurst || countdown !== null}
+              aria-label="Take photo"
             >
-              <span className="icon">{previewEnabled ? 'visibility' : 'visibility_off'}</span>
-              <span className="previewLabel">Preview</span>
+              <span className="icon">camera</span>
             </button>
 
             <ul className="modeSelector">
@@ -296,6 +421,46 @@ export default function App({ isDemo = false, photoLimit = null }) {
                   <span>✏️</span> <p>Custom</p>
                 </button>
               </li>
+
+              {/* Custom Modes Section (Premium Feature) */}
+              {!isDemo && organizedCustomModes().length > 0 && (
+                <>
+                  <li className="favoritesLabel" key="custom-modes-label">
+                    <span className="labelText">✨ My Custom Modes</span>
+                  </li>
+                  {organizedCustomModes().map((mode) => (
+                    <li
+                      key={`custom-${mode.id}`}
+                      onMouseEnter={e => handleModeHover({key: `custom-${mode.id}`, prompt: mode.prompt}, e)}
+                      onMouseLeave={() => handleModeHover(null)}
+                      className={c({isFavorite: mode.is_favorite})}
+                    >
+                      <button
+                        onClick={() => {
+                          setMode(`custom-${mode.id}`)
+                          setCustomPrompt(mode.prompt)
+                        }}
+                        className={c({active: activeMode === `custom-${mode.id}`})}
+                      >
+                        <span>{mode.emoji}</span> <p>{mode.name}</p>
+                      </button>
+                      <button
+                        className="favoriteBtn"
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          if (actions.toggleCustomModeFavorite) {
+                            actions.toggleCustomModeFavorite(mode.id)
+                          }
+                        }}
+                        aria-label={mode.is_favorite ? 'Remove from favorites' : 'Add to favorites'}
+                      >
+                        <span className="icon">{mode.is_favorite ? 'star' : 'star_border'}</span>
+                      </button>
+                    </li>
+                  ))}
+                </>
+              )}
+
               {favoriteModes.length > 0 && (
                 <li className="favoritesLabel" key="favorites-label">
                   <span className="labelText">⭐ Favorites</span>
@@ -395,7 +560,7 @@ export default function App({ isDemo = false, photoLimit = null }) {
                       alt={isBusy ? 'Photo being processed' : 'Processed photo'}
                     />
                     <p className="emoji" aria-hidden="true">
-                      {mode === 'custom' ? '✏️' : modes[mode].emoji}
+                      {mode === 'custom' || mode.startsWith('custom-') ? '✏️' : modes[mode]?.emoji || '✨'}
                     </p>
                   </button>
                 </li>
@@ -450,6 +615,17 @@ export default function App({ isDemo = false, photoLimit = null }) {
       {showBatchUpload && !isDemo && (
         <BatchUpload onClose={() => setShowBatchUpload(false)} />
       )}
+
+      <CameraSettings
+        isOpen={showCameraSettings}
+        onClose={() => setShowCameraSettings(false)}
+        facingMode={facingMode}
+        onFacingModeChange={handleFacingModeChange}
+        timerDuration={timerDuration}
+        onTimerChange={handleTimerChange}
+        burstMode={burstMode}
+        onBurstModeChange={handleBurstModeChange}
+      />
     </main>
   )
 }

@@ -37,10 +37,12 @@ export default function SubscriptionManager() {
 
   const handleManageSubscription = async () => {
     try {
+      console.log('Opening portal for user:', user.id)
       await createPortalSession(user.id)
     } catch (error) {
       console.error('Error opening portal:', error)
-      alert('Failed to open subscription management portal')
+      console.error('Error details:', JSON.stringify(error, null, 2))
+      alert(`Failed to open subscription management portal: ${error.message || 'Unknown error'}`)
     }
   }
 

@@ -305,112 +305,6 @@ main {
   scale: 0.8;
   rotate: 10deg;
 }
-
-/* Preview Toggle Button */
-.previewToggle {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 20px;
-  padding: 8px 16px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 14px;
-  color: rgba(255, 255, 255, 0.7);
-  transition: all 0.3s ease;
-  z-index: 10;
-}
-.previewToggle .icon {
-  font-size: 20px;
-}
-.previewToggle.active {
-  background: rgba(102, 126, 234, 0.2);
-  border-color: rgba(102, 126, 234, 0.4);
-  color: #667eea;
-}
-.previewToggle:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.2);
-  transform: translateY(-2px);
-}
-.previewToggle.active:hover {
-  background: rgba(102, 126, 234, 0.3);
-  border-color: rgba(102, 126, 234, 0.5);
-}
-@media (max-width: 768px) {
-  .previewToggle {
-    top: 10px;
-    right: 10px;
-    padding: 6px 12px;
-    font-size: 12px;
-  }
-  .previewToggle .icon {
-    font-size: 18px;
-  }
-  .previewLabel {
-    display: none;
-  }
-}
-
-/* Preview Indicator Badge */
-.previewIndicator {
-  position: absolute;
-  top: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(102, 126, 234, 0.15);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(102, 126, 234, 0.3);
-  border-radius: 20px;
-  padding: 6px 14px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 12px;
-  color: #667eea;
-  z-index: 5;
-  animation: fadeIn 0.3s ease;
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
-}
-.previewIndicator .icon {
-  font-size: 16px;
-  animation: pulse 2s ease-in-out infinite;
-}
-@keyframes pulse {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.6;
-  }
-}
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateX(-50%) translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
-}
-@media (max-width: 768px) {
-  .previewIndicator {
-    top: 70px;
-    padding: 5px 12px;
-    font-size: 11px;
-  }
-  .previewIndicator .icon {
-    font-size: 14px;
-  }
-}
-
 .focusedPhoto {
   position: absolute;
   top: 50%;
@@ -2830,4 +2724,412 @@ main {
   .batchUpload__progress h3 {
     font-size: 20px;
   }
+}
+
+/* ================================================
+   CAMERA SETTINGS
+   ================================================ */
+
+/* Settings Button */
+.settingsBtn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  z-index: 10;
+}
+
+.settingsBtn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: rotate(90deg);
+}
+
+.settingsBtn:active {
+  transform: rotate(90deg) scale(0.95);
+}
+
+.settingsBtn .icon {
+  font-size: 24px;
+}
+
+@media (max-width: 768px) {
+  .settingsBtn {
+    width: 44px;
+    height: 44px;
+    top: 15px;
+    right: 15px;
+  }
+
+  .settingsBtn .icon {
+    font-size: 20px;
+  }
+}
+
+/* Camera Settings Modal */
+.cameraSettingsOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.cameraSettingsModal {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  max-width: 500px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: slideUp 0.3s ease;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.cameraSettingsHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 24px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.cameraSettingsHeader h2 {
+  font-size: 24px;
+  font-weight: 500;
+  color: #fff;
+}
+
+.cameraSettingsContent {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+/* Setting Section */
+.settingSection {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.settingSection h3 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 16px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.settingSection h3 .icon {
+  font-size: 20px;
+  color: #667eea;
+}
+
+/* Setting Options */
+.settingOptions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.settingOptions.timerGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.settingOption {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  width: 100%;
+}
+
+.settingOption:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.settingOption.active {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
+  border-color: #667eea;
+  box-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
+}
+
+.settingOption .icon {
+  font-size: 28px;
+  color: rgba(255, 255, 255, 0.7);
+  flex-shrink: 0;
+}
+
+.settingOption.active .icon {
+  color: #667eea;
+}
+
+.settingOption div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: left;
+}
+
+.optionLabel {
+  font-size: 15px;
+  font-weight: 500;
+  color: #fff;
+}
+
+.optionDesc {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* Timer Labels */
+.timerLabel {
+  font-size: 32px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.8);
+  display: block;
+}
+
+.settingOption.active .timerLabel {
+  color: #667eea;
+}
+
+.settingOptions.timerGrid .settingOption {
+  flex-direction: column;
+  text-align: center;
+  padding: 20px 16px;
+  gap: 8px;
+}
+
+.settingOptions.timerGrid .optionDesc {
+  font-size: 11px;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .cameraSettingsModal {
+    max-width: 95%;
+    border-radius: 16px;
+  }
+
+  .cameraSettingsHeader {
+    padding: 20px;
+  }
+
+  .cameraSettingsHeader h2 {
+    font-size: 20px;
+  }
+
+  .cameraSettingsContent {
+    padding: 20px;
+    gap: 24px;
+  }
+
+  .settingSection h3 {
+    font-size: 14px;
+  }
+
+  .settingOption {
+    padding: 14px;
+    gap: 12px;
+  }
+
+  .settingOption .icon {
+    font-size: 24px;
+  }
+
+  .optionLabel {
+    font-size: 14px;
+  }
+
+  .timerLabel {
+    font-size: 28px;
+  }
+
+  .settingOptions.timerGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+}
+
+/* ================================================
+   COUNTDOWN OVERLAY
+   ================================================ */
+
+.countdownOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(5px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  animation: fadeIn 0.2s ease;
+}
+
+.countdownNumber {
+  font-size: 180px;
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 0 0 40px rgba(255, 255, 255, 0.5);
+  animation: countdownPulse 1s ease-in-out;
+  line-height: 1;
+}
+
+@keyframes countdownPulse {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.countdownText {
+  font-size: 24px;
+  color: rgba(255, 255, 255, 0.8);
+  margin-top: 20px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+@media (max-width: 768px) {
+  .countdownNumber {
+    font-size: 120px;
+  }
+
+  .countdownText {
+    font-size: 18px;
+    margin-top: 15px;
+  }
+}
+
+/* ================================================
+   BURST MODE OVERLAY
+   ================================================ */
+
+.burstOverlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 50;
+  animation: fadeIn 0.2s ease;
+}
+
+.burstProgress {
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  padding: 24px 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+.burstProgress .icon {
+  font-size: 48px;
+  color: #667eea;
+  animation: burstPulse 0.8s ease-in-out infinite;
+}
+
+@keyframes burstPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+}
+
+.burstText {
+  font-size: 20px;
+  font-weight: 500;
+  color: #fff;
+  text-align: center;
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .burstProgress {
+    padding: 20px 28px;
+  }
+
+  .burstProgress .icon {
+    font-size: 40px;
+  }
+
+  .burstText {
+    font-size: 16px;
+  }
+}
+
+/* Disabled shutter during countdown/burst */
+.shutter:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
 }

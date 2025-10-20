@@ -1,15 +1,26 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
-import Stripe from 'https://esm.sh/stripe@14.11.0?target=deno'
+import Stripe from 'npm:stripe@^17.0.0'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3'
 
 const stripe = new Stripe(Deno.env.get('STRIPE_SECRET_KEY') || '', {
-  apiVersion: '2023-10-16',
+  apiVersion: '2024-11-20.acacia',
   httpClient: Stripe.createFetchHttpClient(),
 })
 
 const cryptoProvider = Stripe.createSubtleCryptoProvider()
 
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'stripe-signature, content-type',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
+}
+
 serve(async (req) => {
+  // Handle OPTIONS request for CORS
+  if (req.method === 'OPTIONS') {
+    return new Response('ok', { headers: corsHeaders, status: 200 })
+  }
+
   const signature = req.headers.get('Stripe-Signature')
   const webhookSecret = Deno.env.get('STRIPE_WEBHOOK_SECRET')
 
@@ -50,6 +61,7 @@ serve(async (req) => {
         const tierId = session.metadata?.tier_id
 
         if (userId && tierId && session.subscription) {
+          console.log('🎉 Checkout completed for user:', userId, 'tier:', tierId)
           await supabase
             .from('subscriptions')
             .update({
@@ -60,6 +72,29 @@ serve(async (req) => {
               current_period_end: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
             })
             .eq('user_id', userId)
+          console.log('✅ Subscription updated from checkout.session.completed')
+        }
+        break
+      }
+
+      case 'customer.subscription.created': {
+        const subscription = event.data.object as Stripe.Subscription
+        const userId = subscription.metadata?.user_id
+        const tierId = subscription.metadata?.tier_id
+
+        if (userId && tierId) {
+          console.log('🆕 Subscription created for user:', userId, 'tier:', tierId)
+          await supabase
+            .from('subscriptions')
+            .update({
+              tier_id: tierId,
+              stripe_subscription_id: subscription.id,
+              status: subscription.status,
+              current_period_start: new Date(subscription.current_period_start * 1000).toISOString(),
+              current_period_end: new Date(subscription.current_period_end * 1000).toISOString(),
+            })
+            .eq('user_id', userId)
+          console.log('✅ Subscription updated from customer.subscription.created')
         }
         break
       }
@@ -146,7 +181,7 @@ serve(async (req) => {
     }
 
     return new Response(JSON.stringify({ received: true }), {
-      headers: { 'Content-Type': 'application/json' },
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       status: 200,
     })
   } catch (error) {
@@ -154,7 +189,7 @@ serve(async (req) => {
     return new Response(
       JSON.stringify({ error: error.message }),
       {
-        headers: { 'Content-Type': 'application/json' },
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         status: 400,
       }
     )

@@ -1,0 +1,368 @@
+/* Custom Mode Manager - Premium Feature */
+.customModeManager {
+  min-height: 100vh;
+  background: #000;
+  padding: 6rem 2rem 2rem;
+  color: #fff;
+}
+
+.customModeManager .header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.customModeManager h2 {
+  font-size: 2rem;
+  margin: 0;
+  color: #fff;
+}
+
+.customModeManager .createButton {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 600;
+}
+
+.customModeManager .createButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+/* Create/Edit Form */
+.customModeManager .createForm {
+  max-width: 600px;
+  margin: 0 auto 2rem;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 2rem;
+}
+
+.customModeManager .createForm h3 {
+  margin: 0 0 1.5rem;
+  color: #fff;
+  font-size: 1.5rem;
+}
+
+.customModeManager .formGroup {
+  margin-bottom: 1.5rem;
+}
+
+.customModeManager .formGroup label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 500;
+}
+
+.customModeManager .formGroup .hint {
+  display: block;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 400;
+  margin-top: 0.25rem;
+}
+
+.customModeManager .formGroup input,
+.customModeManager .formGroup textarea {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  padding: 0.75rem;
+  color: #fff;
+  font-size: 1rem;
+  font-family: inherit;
+  transition: all 0.2s ease;
+}
+
+.customModeManager .formGroup input:focus,
+.customModeManager .formGroup textarea:focus {
+  outline: none;
+  background: rgba(255, 255, 255, 0.12);
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.customModeManager .formGroup input::placeholder,
+.customModeManager .formGroup textarea::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.customModeManager .charCount {
+  text-align: right;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.5);
+  margin-top: 0.25rem;
+}
+
+.customModeManager .formActions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.customModeManager .submitButton {
+  flex: 1;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 600;
+}
+
+.customModeManager .submitButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.customModeManager .cancelButton {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.customModeManager .cancelButton:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* Modes List */
+.customModeManager .modesList {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.customModeManager .modeCard {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 1.5rem;
+  transition: all 0.2s ease;
+}
+
+.customModeManager .modeCard:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.customModeManager .modeHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.customModeManager .modeEmoji {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.customModeManager .modeName {
+  flex: 1;
+  margin: 0;
+  font-size: 1.25rem;
+  color: #fff;
+}
+
+.customModeManager .favoriteButton {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.25rem;
+  color: rgba(255, 255, 255, 0.6);
+  transition: all 0.2s ease;
+}
+
+.customModeManager .favoriteButton:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.customModeManager .favoriteButton.active {
+  background: rgba(255, 215, 0, 0.15);
+  border-color: rgba(255, 215, 0, 0.3);
+  color: #ffd700;
+}
+
+.customModeManager .modePrompt {
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.6;
+  margin: 0 0 1rem;
+  font-size: 0.95rem;
+}
+
+.customModeManager .modeActions {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.customModeManager .editButton,
+.customModeManager .deleteButton {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.customModeManager .editButton:hover {
+  background: rgba(102, 126, 234, 0.15);
+  border-color: rgba(102, 126, 234, 0.3);
+  color: #667eea;
+}
+
+.customModeManager .deleteButton:hover {
+  background: rgba(255, 107, 107, 0.15);
+  border-color: rgba(255, 107, 107, 0.3);
+  color: #ff6b6b;
+}
+
+.customModeManager .modeFooter {
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.customModeManager .modeDate {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* Empty State */
+.customModeManager .emptyState {
+  text-align: center;
+  padding: 4rem 2rem;
+  max-width: 500px;
+  margin: 0 auto;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.customModeManager .emptyState p {
+  margin: 0.5rem 0;
+  font-size: 1.1rem;
+}
+
+/* Premium Required */
+.customModeManager .premiumRequired {
+  max-width: 600px;
+  margin: 4rem auto;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 3rem 2rem;
+}
+
+.customModeManager .premiumRequired h2 {
+  margin: 0 0 1rem;
+  font-size: 2rem;
+  color: #fff;
+}
+
+.customModeManager .premiumRequired p {
+  margin: 0.75rem 0;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 1.1rem;
+}
+
+.customModeManager .upgradeButton {
+  display: inline-block;
+  margin-top: 1.5rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.customModeManager .upgradeButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+/* Loading Spinner */
+.customModeManager .loadingSpinner {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1.2rem;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .customModeManager {
+    padding: 5rem 1rem 1rem;
+  }
+
+  .customModeManager .header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+
+  .customModeManager h2 {
+    font-size: 1.5rem;
+    text-align: center;
+  }
+
+  .customModeManager .createForm {
+    padding: 1.5rem;
+  }
+
+  .customModeManager .modesList {
+    grid-template-columns: 1fr;
+  }
+
+  .customModeManager .formActions {
+    flex-direction: column;
+  }
+
+  .customModeManager .premiumRequired {
+    padding: 2rem 1.5rem;
+  }
+
+  .customModeManager .premiumRequired h2 {
+    font-size: 1.5rem;
+  }
+}

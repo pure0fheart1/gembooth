@@ -13,6 +13,8 @@ import SettingsPage from './SettingsPage'
 import Gallery from './Gallery'
 import ImageGeneration from './ImageGeneration'
 import Whiteboard from './Whiteboard'
+import CustomModeManager from './CustomModeManager'
+import FitCheckApp from './FitCheck/FitCheckApp'
 import UsageLimitBanner from './UsageLimitBanner'
 import WelcomeTutorial from './Onboarding/WelcomeTutorial'
 // import CookieConsent from './Legal/CookieConsent' // Temporarily disabled due to ad blocker
@@ -27,6 +29,9 @@ function Navigation() {
         <Link to="/">📸 GemBooth</Link>
       </div>
       <div className="navLinks">
+        <Link to="/fit-check" className={location.pathname === '/fit-check' ? 'active' : ''}>
+          👔 Fit Check
+        </Link>
         <Link to="/generate" className={location.pathname === '/generate' ? 'active' : ''}>
           Generate
         </Link>
@@ -35,6 +40,9 @@ function Navigation() {
         </Link>
         <Link to="/whiteboard" className={location.pathname === '/whiteboard' ? 'active' : ''}>
           Whiteboard
+        </Link>
+        <Link to="/custom-modes" className={location.pathname === '/custom-modes' ? 'active' : ''}>
+          ✨ My Modes
         </Link>
         <Link to="/pricing" className={location.pathname === '/pricing' ? 'active' : ''}>
           Pricing
@@ -88,9 +96,11 @@ function AppContent() {
       <UsageLimitBanner />
       <Routes>
         <Route path="/" element={<App />} />
+        <Route path="/fit-check" element={<FitCheckApp />} />
         <Route path="/generate" element={<ImageGeneration />} />
         <Route path="/gallery" element={<Gallery />} />
         <Route path="/whiteboard" element={<Whiteboard />} />
+        <Route path="/custom-modes" element={<CustomModeManager />} />
         <Route path="/pricing" element={<PricingPage />} />
         <Route path="/subscription" element={<SubscriptionPage />} />
         <Route path="/settings" element={<SettingsPage />} />

@@ -9,19 +9,23 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@google/genai": "latest",
+    "@google/genai": "^1.25.0",
     "@stripe/stripe-js": "^8.0.0",
     "@supabase/supabase-js": "^2.58.0",
     "auto-zustand-selectors-hook": "latest",
     "clsx": "latest",
+    "dotenv": "^17.2.3",
+    "framer-motion": "^11.2.12",
     "gifenc": "latest",
     "immer": "latest",
     "lodash.shuffle": "latest",
     "p-limit": "latest",
     "react": "latest",
     "react-dom": "latest",
+    "react-image-crop": "^11.0.6",
     "react-router-dom": "^6.30.1",
     "stripe": "^19.1.0",
+    "tailwind-merge": "^2.4.0",
     "zustand": "latest"
   },
   "devDependencies": {

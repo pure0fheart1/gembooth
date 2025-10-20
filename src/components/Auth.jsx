@@ -3,13 +3,15 @@
  * SPDX-License-Identifier: Apache-2.0
 */
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase/client'
 
-export default function Auth() {
+export default function Auth({ initialMode = 'login' }) {
+  const navigate = useNavigate()
   const [loading, setLoading] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [isSignUp, setIsSignUp] = useState(false)
+  const [isSignUp, setIsSignUp] = useState(initialMode === 'signup')
   const [message, setMessage] = useState('')
 
   const handleAuth = async (e) => {
@@ -84,6 +86,21 @@ export default function Auth() {
             ? 'Already have an account? Sign in'
             : "Don't have an account? Sign up"}
         </button>
+
+        <div className="divider">
+          <span>or</span>
+        </div>
+
+        <button
+          onClick={() => navigate('/demo')}
+          className="demoButton"
+          disabled={loading}
+        >
+          Try Demo Mode
+        </button>
+        <p className="demoHint">
+          No signup required - test the photo booth with up to 5 free transformations
+        </p>
       </div>
     </div>
   )

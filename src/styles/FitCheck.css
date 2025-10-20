@@ -1,0 +1,1053 @@
+/**
+ * FitCheck Virtual Try-On Styles
+ * Adapted to GemBooth's dark frosted glass design system
+ */
+
+/* ============================================
+   Main Page Container
+   ============================================ */
+
+.fitCheckPage {
+  min-height: 100vh;
+  background: #000;
+  color: #fff;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Page Header */
+.fitCheckPageHeader {
+  position: sticky;
+  top: 60px;
+  z-index: 50;
+  background: rgba(0, 0, 0, 0.95);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 1.5rem 2rem;
+}
+
+.fitCheckPageHeaderContent {
+  max-width: 1600px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.fitCheckPageTitle {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.fitCheckPageSubtitle {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.7);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Page Content */
+.fitCheckPageContent {
+  min-height: calc(100vh - 180px);
+  padding: 2rem;
+}
+
+.fitCheckCenteredContainer {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 240px);
+}
+
+/* Main Layout (Canvas + Sidebar) */
+.fitCheckMainLayout {
+  max-width: 1600px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: 2rem;
+  min-height: calc(100vh - 240px);
+  align-items: start;
+}
+
+.fitCheckCanvasSection {
+  position: relative;
+}
+
+.fitCheckCanvasWrapper {
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 2rem;
+  min-height: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.fitCheckSidebarSection {
+  position: sticky;
+  top: 180px;
+  max-height: calc(100vh - 200px);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.fitCheckMobileToggle {
+  display: none;
+}
+
+.fitCheckSidebarContent {
+  padding: 1.5rem;
+  max-height: calc(100vh - 200px);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.fitCheckSidebarScroll {
+  overflow-y: auto;
+  flex: 1;
+  padding-right: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.fitCheckMobileLoading {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.9);
+  backdrop-filter: blur(10px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.fitCheckMobileLoading .fitCheckLoadingText {
+  margin-top: 1.5rem;
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.9);
+  text-align: center;
+  padding: 0 2rem;
+}
+
+/* ============================================
+   Start Screen Styles
+   ============================================ */
+
+.fitCheckStartScreen {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+.fitCheckStartLeft {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.fitCheckStartContent {
+  max-width: 540px;
+}
+
+.fitCheckStartBadge {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background: rgba(102, 126, 234, 0.15);
+  border: 1px solid rgba(102, 126, 234, 0.3);
+  border-radius: 50px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #667eea;
+  margin-bottom: 1.5rem;
+}
+
+.fitCheckStartHeading {
+  font-size: 3rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: #fff;
+  margin-bottom: 1rem;
+}
+
+.fitCheckStartDescription {
+  font-size: 1.125rem;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 0;
+}
+
+.fitCheckStartDivider {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2) 20%,
+    rgba(255, 255, 255, 0.2) 80%,
+    transparent
+  );
+  margin: 2rem 0;
+}
+
+.fitCheckStartUploadSection {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.fitCheckUploadButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1rem 2rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+.fitCheckUploadButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+}
+
+.fitCheckUploadButton:active {
+  transform: translateY(0);
+}
+
+.fitCheckStartHints {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.fitCheckStartHint {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.6);
+  padding-left: 0.5rem;
+}
+
+.fitCheckStartDisclaimer {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.4);
+  line-height: 1.5;
+  margin-top: 0.5rem;
+}
+
+.fitCheckStartError {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: rgba(255, 107, 107, 0.1);
+  border: 1px solid rgba(255, 107, 107, 0.3);
+  border-radius: 8px;
+  color: #ff6b6b;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+}
+
+.fitCheckStartErrorIcon {
+  font-size: 1.25rem;
+}
+
+.fitCheckStartRight {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fitCheckStartDemo {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.fitCheckCompareImage {
+  width: 100%;
+  max-width: 400px;
+  aspect-ratio: 2/3;
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.fitCheckStartDemoCaption {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.5);
+  text-align: center;
+}
+
+/* Responsive Start Screen */
+@media (max-width: 1024px) {
+  .fitCheckStartScreen {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    padding: 2rem 1rem;
+  }
+
+  .fitCheckStartLeft {
+    text-align: center;
+  }
+
+  .fitCheckStartContent {
+    margin: 0 auto;
+  }
+
+  .fitCheckStartBadge {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .fitCheckStartHeading {
+    font-size: 2.5rem;
+  }
+
+  .fitCheckCompareImage {
+    max-width: 320px;
+  }
+}
+
+@media (max-width: 768px) {
+  .fitCheckStartHeading {
+    font-size: 2rem;
+  }
+
+  .fitCheckStartDescription {
+    font-size: 1rem;
+  }
+
+  .fitCheckStartHints {
+    align-items: center;
+  }
+
+  .fitCheckCompareImage {
+    max-width: 280px;
+  }
+}
+
+/* ============================================
+   Canvas Display Area
+   ============================================ */
+
+.fitCheckCanvas {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.fitCheckCanvasInner {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.fitCheckCanvasImage {
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+/* ============================================
+   Wardrobe Panel (Sidebar)
+   ============================================ */
+
+.fitCheckWardrobe {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  max-height: 60vh;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  overflow-y: auto;
+  padding: 1.5rem;
+}
+
+.fitCheckWardrobeHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.fitCheckWardrobeTitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.fitCheckWardrobeClose {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.fitCheckWardrobeClose:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.fitCheckWardrobeGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 1rem;
+}
+
+.fitCheckWardrobeItem {
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+.fitCheckWardrobeItem:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.fitCheckWardrobeItem.active {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: #667eea;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.5);
+}
+
+.fitCheckWardrobeItemImage {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+}
+
+.fitCheckWardrobeItemLabel {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.9rem;
+}
+
+/* ============================================
+   Buttons
+   ============================================ */
+
+.fitCheckButton {
+  background: rgba(255, 255, 255, 0.08);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.fitCheckButton:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.fitCheckButton:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.fitCheckPrimaryButton {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.fitCheckPrimaryButton:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(102, 126, 234, 0.5);
+}
+
+.fitCheckPrimaryButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.fitCheckDangerButton {
+  background: rgba(255, 107, 107, 0.1);
+  border: 2px solid rgba(255, 107, 107, 0.3);
+  color: #ff6b6b;
+}
+
+.fitCheckDangerButton:hover:not(:disabled) {
+  background: rgba(255, 107, 107, 0.15);
+  border-color: rgba(255, 107, 107, 0.5);
+}
+
+.fitCheckButtonGroup {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+
+/* ============================================
+   Toolbar / Controls
+   ============================================ */
+
+.fitCheckToolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  position: sticky;
+  top: 60px;
+  z-index: 100;
+}
+
+.fitCheckToolbarLeft,
+.fitCheckToolbarRight {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.fitCheckToolbarTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+/* ============================================
+   Loading States
+   ============================================ */
+
+.fitCheckLoading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.fitCheckSpinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid rgba(255, 255, 255, 0.1);
+  border-top-color: #667eea;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.fitCheckLoadingText {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* ============================================
+   Error States
+   ============================================ */
+
+.fitCheckError {
+  background: rgba(255, 107, 107, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 107, 107, 0.3);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 2rem auto;
+  max-width: 600px;
+  color: #ff6b6b;
+  text-align: center;
+}
+
+.fitCheckErrorIcon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.fitCheckErrorTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #ff6b6b;
+}
+
+.fitCheckErrorMessage {
+  font-size: 1rem;
+  color: rgba(255, 107, 107, 0.9);
+  margin-bottom: 1rem;
+}
+
+/* ============================================
+   Empty State
+   ============================================ */
+
+.fitCheckEmpty {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.fitCheckEmptyIcon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  opacity: 0.5;
+}
+
+.fitCheckEmptyTitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #fff;
+}
+
+.fitCheckEmptyMessage {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 2rem;
+}
+
+/* ============================================
+   Upload Area
+   ============================================ */
+
+.fitCheckUpload {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 2px dashed rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  padding: 3rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.fitCheckUpload:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+.fitCheckUpload.dragOver {
+  background: rgba(102, 126, 234, 0.1);
+  border-color: #667eea;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.fitCheckUploadIcon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.fitCheckUploadLabel {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 0.5rem;
+}
+
+.fitCheckUploadHint {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* ============================================
+   Animations
+   ============================================ */
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.6s ease-out forwards;
+}
+
+@keyframes zoom-in {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.animate-zoom-in {
+  animation: zoom-in 0.7s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+@keyframes slide-up {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-up {
+  animation: slide-up 0.6s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+/* ============================================
+   Scrollbars (Dark Theme)
+   ============================================ */
+
+.fitCheckWardrobe::-webkit-scrollbar,
+.fitCheckCanvas::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.fitCheckWardrobe::-webkit-scrollbar-track,
+.fitCheckCanvas::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.fitCheckWardrobe::-webkit-scrollbar-thumb,
+.fitCheckCanvas::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+}
+
+.fitCheckWardrobe::-webkit-scrollbar-thumb:hover,
+.fitCheckCanvas::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+/* ============================================
+   Header Section
+   ============================================ */
+
+.fitCheckHeader {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.fitCheckHeaderTitle {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.fitCheckHeaderSubtitle {
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* ============================================
+   Instructions Card
+   ============================================ */
+
+.fitCheckInstructions {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.fitCheckInstructionsTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #fff;
+}
+
+.fitCheckInstructionsList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.fitCheckInstructionsList li {
+  padding: 0.5rem 0;
+  padding-left: 1.5rem;
+  position: relative;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.fitCheckInstructionsList li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: #10b981;
+  font-weight: bold;
+}
+
+/* ============================================
+   Responsive Design
+   ============================================ */
+
+@media (max-width: 1024px) {
+  .fitCheckMainLayout {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .fitCheckSidebarSection {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: auto;
+    max-height: 60vh;
+    border-radius: 20px 20px 0 0;
+    z-index: 60;
+    transition: transform 0.3s ease;
+  }
+
+  .fitCheckSidebarContent.collapsed {
+    transform: translateY(calc(100% - 3rem));
+  }
+
+  .fitCheckMobileToggle {
+    display: flex;
+    width: 100%;
+    height: 3rem;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    cursor: pointer;
+    transition: background 0.2s ease;
+  }
+
+  .fitCheckMobileToggle:hover {
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  .fitCheckCanvasWrapper {
+    min-height: 500px;
+  }
+}
+
+@media (max-width: 768px) {
+  .fitCheckPageHeader {
+    padding: 1rem;
+  }
+
+  .fitCheckPageTitle {
+    font-size: 1.5rem;
+  }
+
+  .fitCheckPageSubtitle {
+    font-size: 0.9rem;
+  }
+
+  .fitCheckPageContent {
+    padding: 1rem;
+  }
+
+  .fitCheckCenteredContainer {
+    min-height: calc(100vh - 200px);
+  }
+
+  .fitCheckCanvasWrapper {
+    padding: 1rem;
+    min-height: 400px;
+    border-radius: 12px;
+  }
+
+  .fitCheckCanvas {
+    padding: 1rem;
+    border-radius: 12px;
+  }
+
+  .fitCheckWardrobe {
+    max-height: 50vh;
+    padding: 1rem;
+  }
+
+  .fitCheckWardrobeGrid {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 0.75rem;
+  }
+
+  .fitCheckWardrobeItemImage {
+    height: 120px;
+  }
+
+  .fitCheckHeaderTitle {
+    font-size: 2rem;
+  }
+
+  .fitCheckHeaderSubtitle {
+    font-size: 1rem;
+  }
+
+  .fitCheckButtonGroup {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .fitCheckButton,
+  .fitCheckPrimaryButton {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .fitCheckToolbar {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  .fitCheckToolbarLeft,
+  .fitCheckToolbarRight {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .fitCheckSidebarSection {
+    max-height: 55vh;
+  }
+
+  .fitCheckSidebarContent {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .fitCheckHeaderTitle {
+    font-size: 1.75rem;
+  }
+
+  .fitCheckWardrobeGrid {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  }
+
+  .fitCheckWardrobeItemImage {
+    height: 100px;
+  }
+}
+
+/* ============================================
+   Accessibility
+   ============================================ */
+
+.fitCheckButton:focus-visible,
+.fitCheckPrimaryButton:focus-visible,
+.fitCheckDangerButton:focus-visible {
+  outline: 2px solid #667eea;
+  outline-offset: 2px;
+}
+
+.fitCheckWardrobeItem:focus-visible {
+  outline: 2px solid #667eea;
+  outline-offset: 2px;
+}
+
+/* ============================================
+   Utility Classes
+   ============================================ */
+
+.fitCheckHidden {
+  display: none !important;
+}
+
+.fitCheckVisible {
+  display: block !important;
+}
+
+.fitCheckTextCenter {
+  text-align: center;
+}
+
+.fitCheckTextMuted {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.fitCheckMarginTop {
+  margin-top: 2rem;
+}
+
+.fitCheckMarginBottom {
+  margin-bottom: 2rem;
+}

@@ -1,9 +1,9 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
-import Stripe from 'https://esm.sh/stripe@14.11.0?target=deno'
+import Stripe from 'npm:stripe@^17.0.0'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3'
 
 const stripe = new Stripe(Deno.env.get('STRIPE_SECRET_KEY') || '', {
-  apiVersion: '2023-10-16',
+  apiVersion: '2024-11-20.acacia',
   httpClient: Stripe.createFetchHttpClient(),
 })
 
@@ -18,17 +18,28 @@ serve(async (req) => {
   }
 
   try {
+    const authHeader = req.headers.get('Authorization')
+    console.log('🔐 Authorization header:', authHeader ? 'Present' : 'MISSING')
+    console.log('📋 All headers:', Object.fromEntries(req.headers.entries()))
+
     const supabase = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_ANON_KEY') ?? '',
       {
         global: {
-          headers: { Authorization: req.headers.get('Authorization')! },
+          headers: { Authorization: authHeader! },
         },
       }
     )
 
-    const { data: { user } } = await supabase.auth.getUser()
+    // Extract token and pass directly to getUser
+    const token = authHeader?.replace('Bearer ', '')
+    console.log('🎫 Token extracted:', token ? 'Yes' : 'No')
+
+    const { data: { user }, error: authError } = await supabase.auth.getUser(token)
+    console.log('👤 User from auth:', user ? user.id : 'null')
+    console.log('🚫 Auth error:', authError)
+
     if (!user) {
       throw new Error('Not authenticated')
     }
@@ -88,6 +99,10 @@ serve(async (req) => {
       ? tier.stripe_price_id_yearly
       : tier.stripe_price_id_monthly
 
+    if (!priceId) {
+      throw new Error(`Price not configured for ${tierId} ${billingCycle} billing cycle`)
+    }
+
     // Create checkout session
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
@@ -104,6 +119,12 @@ serve(async (req) => {
         user_id: user.id,
         tier_id: tierId,
       },
+      subscription_data: {
+        metadata: {
+          user_id: user.id,
+          tier_id: tierId,
+        },
+      },
     })
 
     return new Response(
@@ -114,6 +135,8 @@ serve(async (req) => {
       }
     )
   } catch (error) {
+    console.error('❌ Checkout error:', error.message)
+    console.error('Full error:', error)
     return new Response(
       JSON.stringify({ error: error.message }),
       {

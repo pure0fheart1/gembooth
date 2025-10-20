@@ -38,7 +38,8 @@ export default function PricingCards({ currentTierId = 'free' }) {
 
   return (
     <div className="pricingCards">
-      <div className="billingToggle">
+      {/* Yearly billing temporarily disabled - only monthly available */}
+      {/* <div className="billingToggle">
         <button
           className={c({ active: billingCycle === 'monthly' })}
           onClick={() => setBillingCycle('monthly')}
@@ -51,7 +52,7 @@ export default function PricingCards({ currentTierId = 'free' }) {
         >
           Yearly <span className="badge">Save 17%</span>
         </button>
-      </div>
+      </div> */}
 
       <div className="cardsGrid">
         {Object.values(SUBSCRIPTION_TIERS).map((tier) => {

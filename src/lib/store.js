@@ -16,7 +16,12 @@ export default createSelectorFunctions(
       activeMode: Object.keys(modes)[0],
       gifInProgress: false,
       gifUrl: null,
-      customPrompt: ''
+      customPrompt: '',
+      favoriteModes: [],
+      customModes: [], // Premium feature: user's custom AI modes
+      batchUploadProgress: null, // {total, completed, current}
+      isDemoMode: false, // Whether app is in demo/guest mode
+      demoPhotosCreated: 0 // Track demo photo count
     }))
   )
 )

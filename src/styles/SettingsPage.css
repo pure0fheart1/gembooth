@@ -1,0 +1,260 @@
+.settingsPage {
+  min-height: 100vh;
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.settingsPage .pageHeader {
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.settingsPage .pageHeader h1 {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+}
+
+.settingsPage .pageHeader p {
+  color: #999;
+  font-size: 1.1rem;
+}
+
+.settingsPage .notAuthenticated,
+.settingsPage .loadingContainer {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.settingsPage .message {
+  padding: 15px 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  text-align: center;
+  font-weight: 500;
+}
+
+.settingsPage .message.success {
+  background: rgba(34, 197, 94, 0.1);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  color: #22c55e;
+}
+
+.settingsPage .message.error {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #ef4444;
+}
+
+.settingsTabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 30px;
+  border-bottom: 1px solid #333;
+  padding-bottom: 0;
+}
+
+.settingsTabs button {
+  padding: 12px 24px;
+  background: none;
+  color: #999;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.2s;
+}
+
+.settingsTabs button:hover {
+  color: #fff;
+}
+
+.settingsTabs button.active {
+  color: #fff;
+  border-bottom-color: #fff;
+}
+
+.settingsContent {
+  background: #111;
+  border-radius: 12px;
+  padding: 30px;
+  border: 1px solid #222;
+}
+
+.settingsSection h2 {
+  font-size: 1.8rem;
+  margin-bottom: 25px;
+}
+
+.settingsSection h3 {
+  font-size: 1.3rem;
+  margin-bottom: 15px;
+  margin-top: 25px;
+}
+
+.settingsSection h3:first-of-type {
+  margin-top: 0;
+}
+
+.formGroup {
+  margin-bottom: 25px;
+}
+
+.formGroup label {
+  display: block;
+  margin-bottom: 8px;
+  color: #ccc;
+  font-weight: 500;
+}
+
+.formGroup input,
+.formGroup textarea {
+  width: 100%;
+  padding: 12px;
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+}
+
+.formGroup input:focus,
+.formGroup textarea:focus {
+  outline: none;
+  border-color: #666;
+}
+
+.formGroup textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.formGroup small {
+  display: block;
+  margin-top: 6px;
+  color: #666;
+  font-size: 0.85rem;
+}
+
+.infoGroup {
+  margin-bottom: 25px;
+}
+
+.emailDisplay {
+  padding: 12px;
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 1rem;
+  margin: 10px 0;
+}
+
+.divider {
+  height: 1px;
+  background: #333;
+  margin: 30px 0;
+}
+
+.button.primary {
+  background: #fff;
+  color: #000;
+  padding: 12px 30px;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: transform 0.2s, opacity 0.2s;
+  margin-top: 10px;
+}
+
+.button.primary:hover:not(:disabled) {
+  transform: scale(1.02);
+}
+
+.button.primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.dangerZone {
+  background: rgba(239, 68, 68, 0.05);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: 8px;
+  padding: 20px;
+  margin-top: 30px;
+}
+
+.dangerZone h3 {
+  color: #ef4444;
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.dangerZone p {
+  color: #999;
+  margin-bottom: 15px;
+}
+
+.dangerZone .dangerNote {
+  font-size: 0.9rem;
+  color: #aaa;
+  font-style: italic;
+}
+
+.button.danger {
+  background: #ef4444;
+  color: #fff;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+
+.button.danger:hover:not(:disabled) {
+  background: #dc2626;
+}
+
+.privacyList {
+  list-style: none;
+  padding: 0;
+  margin: 15px 0;
+}
+
+.privacyList li {
+  padding: 8px 0;
+  color: #ccc;
+  font-size: 0.95rem;
+}
+
+@media (max-width: 768px) {
+  .settingsPage {
+    padding: 15px;
+  }
+
+  .settingsPage .pageHeader h1 {
+    font-size: 2rem;
+  }
+
+  .settingsContent {
+    padding: 20px;
+  }
+
+  .settingsTabs {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .settingsTabs button {
+    white-space: nowrap;
+    padding: 10px 16px;
+    font-size: 0.9rem;
+  }
+
+  .settingsSection h2 {
+    font-size: 1.5rem;
+  }
+
+  .settingsSection h3 {
+    font-size: 1.2rem;
+  }
+}
