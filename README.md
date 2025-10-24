@@ -19,3 +19,4 @@ View your app in AI Studio: https://ai.studio/apps/bundled/gembooth
 3. Run the app:
    `npm run dev`
 "# gembooth" 
+"# gembooth" 
