@@ -2,6 +2,7 @@
  * @license
  * SPDX-License-Identifier: Apache-2.0
 */
+import React from 'react'
 import { BrowserRouter, Routes, Route, Link, useLocation, useNavigate } from 'react-router-dom'
 import { AuthProvider, useAuth } from '../contexts/AuthContext'
 import Auth from './Auth'
@@ -15,22 +16,52 @@ import ImageGeneration from './ImageGeneration'
 import Whiteboard from './Whiteboard'
 import CustomModeManager from './CustomModeManager'
 import FitCheckApp from './FitCheck/FitCheckApp'
+import CoDrawing from './CoDrawing'
+import PastForward from './PastForward'
+import PixShop from './PixShop'
 import UsageLimitBanner from './UsageLimitBanner'
+import UsageCounter, { UsageCounterToggle } from './UsageCounter'
 import WelcomeTutorial from './Onboarding/WelcomeTutorial'
 // import CookieConsent from './Legal/CookieConsent' // Temporarily disabled due to ad blocker
 
 function Navigation() {
   const { signOut } = useAuth()
   const location = useLocation()
+  const [showUserMenu, setShowUserMenu] = React.useState(false)
+  const menuRef = React.useRef(null)
+
+  // Close menu when clicking outside
+  React.useEffect(() => {
+    function handleClickOutside(event) {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setShowUserMenu(false)
+      }
+    }
+
+    if (showUserMenu) {
+      document.addEventListener('mousedown', handleClickOutside)
+      return () => document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [showUserMenu])
 
   return (
     <nav className="appNav">
       <div className="navBrand">
         <Link to="/">📸 GemBooth</Link>
       </div>
+
       <div className="navLinks">
         <Link to="/fit-check" className={location.pathname === '/fit-check' ? 'active' : ''}>
           👔 Fit Check
+        </Link>
+        <Link to="/co-drawing" className={location.pathname === '/co-drawing' ? 'active' : ''}>
+          🎨 Co-Drawing
+        </Link>
+        <Link to="/past-forward" className={location.pathname === '/past-forward' ? 'active' : ''}>
+          ⏰ Past Forward
+        </Link>
+        <Link to="/pixshop" className={location.pathname === '/pixshop' ? 'active' : ''}>
+          ✨ PixShop
         </Link>
         <Link to="/generate" className={location.pathname === '/generate' ? 'active' : ''}>
           Generate
@@ -44,18 +75,32 @@ function Navigation() {
         <Link to="/custom-modes" className={location.pathname === '/custom-modes' ? 'active' : ''}>
           ✨ My Modes
         </Link>
-        <Link to="/pricing" className={location.pathname === '/pricing' ? 'active' : ''}>
-          Pricing
-        </Link>
-        <Link to="/subscription" className={location.pathname === '/subscription' ? 'active' : ''}>
-          My Subscription
-        </Link>
-        <Link to="/settings" className={location.pathname === '/settings' ? 'active' : ''}>
-          Settings
-        </Link>
-        <button className="signOutButton" onClick={signOut}>
-          Sign Out
-        </button>
+
+        <div className="userMenu" ref={menuRef}>
+          <button
+            className="userMenuButton"
+            onClick={() => setShowUserMenu(!showUserMenu)}
+          >
+            <span className="icon">account_circle</span>
+          </button>
+          {showUserMenu && (
+            <div className="userMenuDropdown">
+              <Link to="/pricing" onClick={() => setShowUserMenu(false)}>
+                💎 Pricing
+              </Link>
+              <Link to="/subscription" onClick={() => setShowUserMenu(false)}>
+                📊 My Subscription
+              </Link>
+              <Link to="/settings" onClick={() => setShowUserMenu(false)}>
+                ⚙️ Settings
+              </Link>
+              <div className="menuDivider"></div>
+              <button onClick={() => { signOut(); setShowUserMenu(false); }}>
+                🚪 Sign Out
+              </button>
+            </div>
+          )}
+        </div>
       </div>
     </nav>
   )
@@ -94,9 +139,14 @@ function AppContent() {
     <>
       <Navigation />
       <UsageLimitBanner />
+      <UsageCounter />
+      <UsageCounterToggle />
       <Routes>
         <Route path="/" element={<App />} />
         <Route path="/fit-check" element={<FitCheckApp />} />
+        <Route path="/co-drawing" element={<CoDrawing />} />
+        <Route path="/past-forward" element={<PastForward />} />
+        <Route path="/pixshop" element={<PixShop />} />
         <Route path="/generate" element={<ImageGeneration />} />
         <Route path="/gallery" element={<Gallery />} />
         <Route path="/whiteboard" element={<Whiteboard />} />

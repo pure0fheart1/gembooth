@@ -14,6 +14,9 @@ import { defaultWardrobe } from '../../lib/fitCheck/wardrobeData';
 import Footer from './Footer';
 import { getFriendlyErrorMessage } from '../../lib/fitCheck/utils';
 import Spinner from './Spinner';
+import { useAuth } from '../../contexts/AuthContext';
+import { checkUsageLimit, incrementUsage } from '../../lib/usageTracking';
+import { useNavigate } from 'react-router-dom';
 import '../../styles/FitCheck.css';
 
 const POSE_INSTRUCTIONS = [
@@ -44,6 +47,8 @@ const useMediaQuery = (query) => {
 };
 
 const FitCheckApp = () => {
+  const { user } = useAuth();
+  const navigate = useNavigate();
   const [modelImageUrl, setModelImageUrl] = useState(null);
   const [outfitHistory, setOutfitHistory] = useState([]);
   const [currentOutfitIndex, setCurrentOutfitIndex] = useState(0);
@@ -54,6 +59,13 @@ const FitCheckApp = () => {
   const [isSheetCollapsed, setIsSheetCollapsed] = useState(false);
   const [wardrobe, setWardrobe] = useState(defaultWardrobe);
   const isMobile = useMediaQuery('(max-width: 767px)');
+
+  // Redirect if not authenticated
+  React.useEffect(() => {
+    if (!user) {
+      navigate('/login');
+    }
+  }, [user, navigate]);
 
   const activeOutfitLayers = useMemo(() =>
     outfitHistory.slice(0, currentOutfitIndex + 1),
@@ -104,10 +116,23 @@ const FitCheckApp = () => {
   const handleGarmentSelect = useCallback(async (garmentFile, garmentInfo) => {
     if (!displayImageUrl || isLoading) return;
 
+    // Check if user has authenticated
+    if (!user) {
+      setError('Please log in to use FitCheck');
+      return;
+    }
+
     const nextLayer = outfitHistory[currentOutfitIndex + 1];
     if (nextLayer && nextLayer.garment?.id === garmentInfo.id) {
       setCurrentOutfitIndex(prev => prev + 1);
       setCurrentPoseIndex(0);
+      return;
+    }
+
+    // Check usage limit before proceeding
+    const usageCheck = await checkUsageLimit(user.id, 'fitcheck');
+    if (!usageCheck.allowed) {
+      setError(usageCheck.message || 'You have reached your FitCheck limit for this month. Please upgrade your plan to continue.');
       return;
     }
 
@@ -136,13 +161,16 @@ const FitCheckApp = () => {
         }
         return [...prev, garmentInfo];
       });
+
+      // Increment usage after successful garment application
+      await incrementUsage(user.id, 'fitcheck');
     } catch (err) {
       setError(getFriendlyErrorMessage(err, 'Failed to apply garment'));
     } finally {
       setIsLoading(false);
       setLoadingMessage('');
     }
-  }, [displayImageUrl, isLoading, currentPoseIndex, outfitHistory, currentOutfitIndex]);
+  }, [displayImageUrl, isLoading, currentPoseIndex, outfitHistory, currentOutfitIndex, user]);
 
   const handleRemoveLastGarment = () => {
     if (currentOutfitIndex > 0) {

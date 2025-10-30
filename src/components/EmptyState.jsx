@@ -137,106 +137,30 @@ export default function EmptyState({ type = 'initial', errorMessage = null, onRe
     )
   }
 
-  // Initial/Welcome State (default)
+  // Initial/Welcome State (default) - Minimal version
   return (
-    <li className="emptyState initial" key="empty-initial" role="status" aria-live="polite">
+    <li className="emptyState initial minimal" key="empty-initial" role="status" aria-live="polite">
       <div className="emptyStateContent">
         <div className="emptyStateHeader">
           <div className="welcomeIcon" role="img" aria-label="Camera icon">
             <span className="icon" aria-hidden="true">photo_camera</span>
           </div>
-          <h3>Get Started in 3 Easy Steps</h3>
-          <p className="subtitle">Transform yourself with AI magic</p>
+          <h3>Ready to Transform</h3>
+          <p className="subtitle">Choose a style below and snap a photo!</p>
         </div>
 
-        <div className="emptyStateSteps">
-          <div
-            className={`emptyStep ${currentStep === 1 ? 'active' : 'completed'}`}
-            role="listitem"
-            aria-label="Step 1: Choose an effect"
-          >
-            <div className="stepNumber" aria-hidden="true">1</div>
-            <div className="stepContent">
-              <div className="stepIcon" aria-hidden="true">🎨</div>
-              <h4>Choose an Effect</h4>
-              <p>Pick from Renaissance, Cartoon, Anime, and more!</p>
-            </div>
-          </div>
-
-          <div className="stepArrow" aria-hidden="true">
-            <span className="icon">arrow_forward</span>
-          </div>
-
-          <div
-            className={`emptyStep ${currentStep === 2 ? 'active' : currentStep > 2 ? 'completed' : ''}`}
-            role="listitem"
-            aria-label="Step 2: Strike a pose"
-          >
-            <div className="stepNumber" aria-hidden="true">2</div>
-            <div className="stepContent">
-              <div className="stepIcon" aria-hidden="true">😊</div>
-              <h4>Strike a Pose</h4>
-              <p>Look at the camera and get ready to smile</p>
-            </div>
-          </div>
-
-          <div className="stepArrow" aria-hidden="true">
-            <span className="icon">arrow_forward</span>
-          </div>
-
-          <div
-            className={`emptyStep ${currentStep === 3 ? 'active' : ''}`}
-            role="listitem"
-            aria-label="Step 3: Snap and transform"
-          >
-            <div className="stepNumber" aria-hidden="true">3</div>
-            <div className="stepContent">
-              <div className="stepIcon" aria-hidden="true">📸</div>
-              <h4>Snap & Transform</h4>
-              <p>Click the camera button and watch the magic!</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="emptyStatePointer">
-          <div className={`pointerAnimation ${animate ? 'pulse' : ''}`} role="img" aria-label="Click camera button below">
-            <span className="icon pointingHand">touch_app</span>
-            <p className="pointerText">Click the camera button below</p>
-            <svg
-              className="pointerArrow"
-              viewBox="0 0 100 100"
-              xmlns="http://www.w3.org/2000/svg"
-              aria-hidden="true"
-            >
-              <defs>
-                <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
-                  <polygon points="0 0, 10 3, 0 6" fill="currentColor" />
-                </marker>
-              </defs>
-              <path
-                d="M 50 10 Q 50 50, 80 80"
-                stroke="currentColor"
-                strokeWidth="2"
-                fill="none"
-                markerEnd="url(#arrowhead)"
-                className="arrowPath"
-              />
-            </svg>
-          </div>
-        </div>
-
-        <div className="emptyStateTips" role="complementary" aria-label="Helpful tips">
+        <div className="emptyStateTips compact" role="complementary" aria-label="Quick tips">
           <div className="tip">
-            <span className="tipIcon" aria-hidden="true">💡</span>
-            <p>Good lighting makes better transformations</p>
+            <span className="tipIcon" aria-hidden="true">🎨</span>
+            <p>Pick a style</p>
           </div>
           <div className="tip">
-            <span className="tipIcon" aria-hidden="true">🎭</span>
-            <p>Try different expressions for unique results</p>
+            <span className="tipIcon" aria-hidden="true">📸</span>
+            <p>Take photo</p>
           </div>
           <div className="tip">
-            <span className="tipIcon" aria-hidden="true">🖼️</span>
-            <p>Face the camera directly for best results</p>
+            <span className="tipIcon" aria-hidden="true">✨</span>
+            <p>Watch magic</p>
           </div>
         </div>
       </div>

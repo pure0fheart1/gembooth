@@ -1,0 +1,77 @@
+{
+  "project": {
+    "name": "GemBooth",
+    "version": "1.0.0",
+    "description": "AI-powered photo booth with Google Gemini API",
+    "repository": "Local Project",
+    "tech_stack": [
+      "React 18",
+      "Vite",
+      "Supabase",
+      "Stripe",
+      "Google Gemini AI",
+      "Zustand",
+      "TypeScript"
+    ]
+  },
+  "custom_notes": {
+    "important_reminders": [
+      "Always test Stripe webhooks after deployment changes",
+      "Monitor Edge Function logs for Gemini API errors",
+      "Check usage limits before adding new features",
+      "Remember to set Supabase secrets for production",
+      "Update RLS policies when adding new tables"
+    ],
+    "deployment_checklist": [
+      "Run npm run build locally first",
+      "Test all Edge Functions",
+      "Verify environment variables in Vercel",
+      "Check Supabase secrets are set",
+      "Test Stripe webhooks in production",
+      "Verify CORS settings",
+      "Test authentication flow"
+    ]
+  },
+  "custom_links": {
+    "development": [
+      {
+        "name": "Local Dev Server",
+        "url": "http://localhost:5173"
+      },
+      {
+        "name": "Supabase Local Studio",
+        "url": "http://localhost:54323"
+      }
+    ],
+    "production": [
+      {
+        "name": "Production App",
+        "url": "https://your-app.vercel.app"
+      }
+    ],
+    "documentation": [
+      {
+        "name": "Project Wiki",
+        "url": "Add your project wiki URL here"
+      },
+      {
+        "name": "API Documentation",
+        "url": "Add your API docs URL here"
+      }
+    ]
+  },
+  "team": {
+    "members": [
+      {
+        "name": "Your Name",
+        "role": "Developer",
+        "contact": "your.email@example.com"
+      }
+    ]
+  },
+  "maintenance": {
+    "last_database_migration": "2025-01-07",
+    "last_dependency_update": "2025-10-16",
+    "next_review_date": "2025-11-16"
+  }
+}

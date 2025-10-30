@@ -1,0 +1,10 @@
+# GemBooth Dashboard Requirements
+# Install with: pip install -r requirements.txt
+
+# Flask for web dashboard
+Flask==3.0.0
+
+# Optional: For better performance
+Werkzeug==3.0.1
+
+# Note: Tkinter comes bundled with Python, no separate installation needed

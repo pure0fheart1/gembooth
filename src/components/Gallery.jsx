@@ -10,11 +10,14 @@ import '../styles/Gallery.css'
 
 export default function Gallery() {
   const { user } = useAuth()
-  const [activeTab, setActiveTab] = useState('photos') // 'photos', 'gifs', 'generated', or 'whiteboards'
+  const [activeTab, setActiveTab] = useState('photos') // 'photos', 'gifs', 'generated', 'whiteboards', 'codrawings', 'pastforward'
+  const [viewMode, setViewMode] = useState('grid') // 'grid', 'compact', 'list'
   const [photos, setPhotos] = useState([])
   const [gifs, setGifs] = useState([])
   const [generatedImages, setGeneratedImages] = useState([])
   const [whiteboards, setWhiteboards] = useState([])
+  const [coDrawings, setCoDrawings] = useState([])
+  const [pastForwardImages, setPastForwardImages] = useState([])
   const [loading, setLoading] = useState(true)
   const [selectedItem, setSelectedItem] = useState(null) // For modal
   const [deleting, setDeleting] = useState(null)
@@ -75,6 +78,34 @@ export default function Gallery() {
         setWhiteboards([])
       } else {
         setWhiteboards(whiteboardsData || [])
+      }
+
+      // Fetch co-drawings
+      const { data: coDrawingsData, error: coDrawingsError } = await supabase
+        .from('codrawings')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+
+      if (coDrawingsError) {
+        console.error('Error fetching co-drawings:', coDrawingsError)
+        setCoDrawings([])
+      } else {
+        setCoDrawings(coDrawingsData || [])
+      }
+
+      // Fetch past forward images
+      const { data: pastForwardData, error: pastForwardError } = await supabase
+        .from('pastforward_images')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+
+      if (pastForwardError) {
+        console.error('Error fetching past forward images:', pastForwardError)
+        setPastForwardImages([])
+      } else {
+        setPastForwardImages(pastForwardData || [])
       }
 
       setPhotos(photosData || [])
@@ -163,6 +194,38 @@ export default function Gallery() {
 
         // Update local state
         setWhiteboards(whiteboards.filter(w => w.id !== id))
+      } else if (type === 'codrawing') {
+        // Delete from database
+        const { error: dbError } = await supabase
+          .from('codrawings')
+          .delete()
+          .eq('id', id)
+          .eq('user_id', user.id)
+
+        if (dbError) throw dbError
+
+        // Delete from storage
+        const imageFile = `${user.id}/codrawings/${id}.png`
+        await supabase.storage.from('user-photos').remove([imageFile])
+
+        // Update local state
+        setCoDrawings(coDrawings.filter(c => c.id !== id))
+      } else if (type === 'pastforward') {
+        // Delete from database
+        const { error: dbError } = await supabase
+          .from('pastforward_images')
+          .delete()
+          .eq('id', id)
+          .eq('user_id', user.id)
+
+        if (dbError) throw dbError
+
+        // Delete from storage
+        const imageFile = `${user.id}/pastforward/${id}.jpg`
+        await supabase.storage.from('user-photos').remove([imageFile])
+
+        // Update local state
+        setPastForwardImages(pastForwardImages.filter(p => p.id !== id))
       }
 
       // Close modal if the deleted item was open
@@ -227,7 +290,9 @@ export default function Gallery() {
   const hasGifs = gifs.length > 0
   const hasGeneratedImages = generatedImages.length > 0
   const hasWhiteboards = whiteboards.length > 0
-  const isEmpty = !hasPhotos && !hasGifs && !hasGeneratedImages && !hasWhiteboards
+  const hasCoDrawings = coDrawings.length > 0
+  const hasPastForward = pastForwardImages.length > 0
+  const isEmpty = !hasPhotos && !hasGifs && !hasGeneratedImages && !hasWhiteboards && !hasCoDrawings && !hasPastForward
 
   return (
     <div className="galleryPage">
@@ -268,10 +333,53 @@ export default function Gallery() {
               >
                 ✏️ Whiteboards ({whiteboards.length})
               </button>
+              <button
+                className={`tabButton ${activeTab === 'codrawings' ? 'active' : ''}`}
+                onClick={() => setActiveTab('codrawings')}
+              >
+                🖌️ Co-Drawings ({coDrawings.length})
+              </button>
+              <button
+                className={`tabButton ${activeTab === 'pastforward' ? 'active' : ''}`}
+                onClick={() => setActiveTab('pastforward')}
+              >
+                ⏰ Past Forward ({pastForwardImages.length})
+              </button>
+            </div>
+
+            {/* View Mode Selector */}
+            <div className="viewModeSelector">
+              <span className="viewModeLabel">View:</span>
+              <div className="viewModeButtons">
+                <button
+                  className={`viewModeButton ${viewMode === 'grid' ? 'active' : ''}`}
+                  onClick={() => setViewMode('grid')}
+                  title="Grid View (6 per row)"
+                >
+                  <span className="viewModeIcon">▦</span>
+                  <span className="viewModeText">Grid</span>
+                </button>
+                <button
+                  className={`viewModeButton ${viewMode === 'compact' ? 'active' : ''}`}
+                  onClick={() => setViewMode('compact')}
+                  title="Compact View (9 per row)"
+                >
+                  <span className="viewModeIcon">▤</span>
+                  <span className="viewModeText">Compact</span>
+                </button>
+                <button
+                  className={`viewModeButton ${viewMode === 'list' ? 'active' : ''}`}
+                  onClick={() => setViewMode('list')}
+                  title="List View"
+                >
+                  <span className="viewModeIcon">☰</span>
+                  <span className="viewModeText">List</span>
+                </button>
+              </div>
             </div>
 
             {activeTab === 'photos' && (
-              <div className="galleryGrid">
+              <div className={`galleryGrid ${viewMode}`}>
                 {photos.map(photo => (
                   <div key={photo.id} className="galleryItem">
                     <div
@@ -310,7 +418,7 @@ export default function Gallery() {
             )}
 
             {activeTab === 'gifs' && (
-              <div className="galleryGrid">
+              <div className={`galleryGrid ${viewMode}`}>
                 {gifs.map(gif => (
                   <div key={gif.id} className="galleryItem">
                     <div
@@ -349,7 +457,7 @@ export default function Gallery() {
             )}
 
             {activeTab === 'generated' && (
-              <div className="galleryGrid">
+              <div className={`galleryGrid ${viewMode}`}>
                 {generatedImages.map(image => (
                   <div key={image.id} className="galleryItem">
                     <div
@@ -388,7 +496,7 @@ export default function Gallery() {
             )}
 
             {activeTab === 'whiteboards' && (
-              <div className="galleryGrid">
+              <div className={`galleryGrid ${viewMode}`}>
                 {whiteboards.map(whiteboard => (
                   <div key={whiteboard.id} className="galleryItem">
                     <div
@@ -419,6 +527,85 @@ export default function Gallery() {
                         title="Delete"
                       >
                         {deleting === whiteboard.id ? '⏳' : '🗑️'}
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {activeTab === 'codrawings' && (
+              <div className={`galleryGrid ${viewMode}`}>
+                {coDrawings.map(drawing => (
+                  <div key={drawing.id} className="galleryItem">
+                    <div
+                      className="galleryItemImage"
+                      onClick={() => setSelectedItem({ ...drawing, type: 'codrawing' })}
+                    >
+                      <img src={drawing.image_url} alt="Co-Drawing" />
+                      <div className="galleryItemOverlay">
+                        <span className="viewLabel">Click to view</span>
+                      </div>
+                    </div>
+                    <div className="galleryItemInfo">
+                      <div className="galleryItemMode">🖌️ Co-Drawing</div>
+                      <div className="galleryItemPrompt">{drawing.prompt}</div>
+                      <div className="galleryItemDate">{formatDate(drawing.created_at)}</div>
+                    </div>
+                    <div className="galleryItemActions">
+                      <button
+                        className="iconButton"
+                        onClick={() => handleDownload(drawing.image_url, `codrawing-${drawing.id}.png`)}
+                        title="Download"
+                      >
+                        ⬇️
+                      </button>
+                      <button
+                        className="iconButton deleteButton"
+                        onClick={() => handleDelete(drawing.id, 'codrawing')}
+                        disabled={deleting === drawing.id}
+                        title="Delete"
+                      >
+                        {deleting === drawing.id ? '⏳' : '🗑️'}
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {activeTab === 'pastforward' && (
+              <div className={`galleryGrid ${viewMode}`}>
+                {pastForwardImages.map(image => (
+                  <div key={image.id} className="galleryItem">
+                    <div
+                      className="galleryItemImage"
+                      onClick={() => setSelectedItem({ ...image, type: 'pastforward' })}
+                    >
+                      <img src={image.image_url} alt={`Past Forward - ${image.decade}`} />
+                      <div className="galleryItemOverlay">
+                        <span className="viewLabel">Click to view</span>
+                      </div>
+                    </div>
+                    <div className="galleryItemInfo">
+                      <div className="galleryItemMode">⏰ {image.decade}</div>
+                      <div className="galleryItemDate">{formatDate(image.created_at)}</div>
+                    </div>
+                    <div className="galleryItemActions">
+                      <button
+                        className="iconButton"
+                        onClick={() => handleDownload(image.image_url, `pastforward-${image.decade}-${image.id}.jpg`)}
+                        title="Download"
+                      >
+                        ⬇️
+                      </button>
+                      <button
+                        className="iconButton deleteButton"
+                        onClick={() => handleDelete(image.id, 'pastforward')}
+                        disabled={deleting === image.id}
+                        title="Delete"
+                      >
+                        {deleting === image.id ? '⏳' : '🗑️'}
                       </button>
                     </div>
                   </div>

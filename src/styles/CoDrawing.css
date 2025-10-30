@@ -1,0 +1,355 @@
+/* Co-Drawing Studio Styles */
+
+.coDrawingPage {
+  min-height: 100vh;
+  background: #000;
+  padding-top: 80px;
+  padding-bottom: 2rem;
+}
+
+.coDrawingHeader {
+  max-width: 1200px;
+  margin: 0 auto 3rem;
+  padding: 0 2rem;
+}
+
+.coDrawingTitle {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: #fff;
+}
+
+.coDrawingTitleGradient {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.coDrawingSubtitle {
+  font-size: 1.125rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.coDrawingMain {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.coDrawingContainer {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 2rem;
+}
+
+.coDrawingToolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
+}
+
+.coDrawingToolbarLeft,
+.coDrawingToolbarRight {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.coDrawingModelSelect {
+  position: relative;
+}
+
+.coDrawingSelect {
+  appearance: none;
+  background: rgba(255, 255, 255, 0.08);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: #fff;
+  padding: 0.5rem 2.5rem 0.5rem 1rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.coDrawingSelect:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.coDrawingSelect:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+}
+
+.coDrawingSelectIcon {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1rem;
+  height: 1rem;
+  color: rgba(255, 255, 255, 0.6);
+  pointer-events: none;
+}
+
+.coDrawingColorButton {
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.coDrawingColorButton:hover {
+  transform: scale(1.1);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.coDrawingColorInput {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+}
+
+.coDrawingToolButton {
+  width: 2.5rem;
+  height: 2.5rem;
+  background: rgba(255, 255, 255, 0.08);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.coDrawingToolButton:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: scale(1.05);
+}
+
+.coDrawingToolButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.coDrawingToolIcon {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: #fff;
+}
+
+.coDrawingCanvasContainer {
+  width: 100%;
+  margin-bottom: 1.5rem;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.coDrawingCanvas {
+  width: 100%;
+  height: auto;
+  display: block;
+  cursor: crosshair;
+  background: #fff;
+  touch-action: none;
+}
+
+.coDrawingForm {
+  width: 100%;
+}
+
+.coDrawingInputContainer {
+  position: relative;
+  width: 100%;
+}
+
+.coDrawingInput {
+  width: 100%;
+  padding: 1rem 4rem 1rem 1.5rem;
+  background: rgba(255, 255, 255, 0.08);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  color: #fff;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+}
+
+.coDrawingInput::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.coDrawingInput:focus {
+  outline: none;
+  border-color: #667eea;
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+}
+
+.coDrawingSubmitButton {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2.5rem;
+  height: 2.5rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.coDrawingSubmitButton:hover {
+  transform: translateY(-50%) scale(1.05);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.coDrawingSubmitButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.coDrawingSubmitIcon,
+.coDrawingLoadingIcon {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: #fff;
+}
+
+.coDrawingLoadingIcon {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.coDrawingModal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 1rem;
+}
+
+.coDrawingModalContent {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  padding: 2rem;
+  max-width: 500px;
+  width: 100%;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+.coDrawingModalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.coDrawingModalTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.coDrawingModalClose {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.coDrawingModalClose:hover {
+  color: #fff;
+}
+
+.coDrawingModalCloseIcon {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.coDrawingModalMessage {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .coDrawingPage {
+    padding-top: 60px;
+  }
+
+  .coDrawingTitle {
+    font-size: 2rem;
+  }
+
+  .coDrawingSubtitle {
+    font-size: 1rem;
+  }
+
+  .coDrawingContainer {
+    padding: 1rem;
+  }
+
+  .coDrawingToolbar {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: stretch;
+  }
+
+  .coDrawingToolbarLeft,
+  .coDrawingToolbarRight {
+    justify-content: center;
+  }
+
+  .coDrawingInput {
+    padding: 0.875rem 3.5rem 0.875rem 1rem;
+    font-size: 0.875rem;
+  }
+
+  .coDrawingSubmitButton {
+    width: 2rem;
+    height: 2rem;
+  }
+
+  .coDrawingSubmitIcon,
+  .coDrawingLoadingIcon {
+    width: 1rem;
+    height: 1rem;
+  }
+}

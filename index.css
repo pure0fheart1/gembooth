@@ -179,93 +179,212 @@ main {
 }
 .modeSelector {
   display: flex;
-  gap: 16px;
-  background: #000c;
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
+  gap: 8px;
+  background: rgba(0, 0, 0, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   width: 100%;
-  padding: 10px;
-  border-top: 1px solid #333;
-  overflow: auto;
+  padding: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.5);
 }
+
+.modeSelector::-webkit-scrollbar {
+  height: 6px;
+}
+
+.modeSelector::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.modeSelector::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+}
+
 .modeSelector li {
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 4px;
+  flex-shrink: 0;
 }
+
 .modeSelector li.favoritesLabel {
   flex-direction: row;
   align-self: center;
-  padding: 4px 12px;
-  background: rgba(255, 215, 0, 0.1);
-  border-radius: 4px;
-  border: 1px solid rgba(255, 215, 0, 0.3);
+  padding: 6px 12px;
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(255, 193, 7, 0.15));
+  border-radius: 8px;
+  border: 1px solid rgba(255, 215, 0, 0.4);
+  margin: 0 4px;
 }
+
 .modeSelector li.favoritesLabel .labelText {
-  font-size: 12px;
+  font-size: 11px;
   text-transform: uppercase;
+  letter-spacing: 0.5px;
   color: #ffd700;
-  font-weight: bold;
+  font-weight: 600;
   white-space: nowrap;
 }
+
 .modeSelector li.isFavorite {
   order: -1;
 }
+
 .modeSelector button {
   text-transform: uppercase;
-  font-size: 16px;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  filter: grayscale(1) brightness(0.7);
-  transition: all 0.2s;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   white-space: nowrap;
-  gap: 5px;
+  gap: 6px;
   position: relative;
-  background: transparent;
-  padding: 1px 7px;
-  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  min-width: 90px;
+  opacity: 0.7;
 }
+
+.modeSelector button span {
+  font-size: 24px;
+  filter: grayscale(0.7);
+  transition: filter 0.25s ease;
+}
+
+.modeSelector button p {
+  font-size: 11px;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.7);
+  transition: color 0.25s ease;
+}
+
+.modeSelector button:hover {
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.25);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.modeSelector button:hover span {
+  filter: grayscale(0);
+}
+
+.modeSelector button:hover p {
+  color: rgba(255, 255, 255, 0.95);
+}
+
 .modeSelector button.active {
-  filter: grayscale(0) brightness(1) !important;
-  background: #fff;
-  color: #000;
+  opacity: 1;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-color: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 16px rgba(102, 126, 234, 0.4);
+  transform: translateY(-2px);
 }
+
+.modeSelector button.active span {
+  filter: grayscale(0);
+  transform: scale(1.1);
+}
+
+.modeSelector button.active p {
+  color: #fff;
+  font-weight: 600;
+}
+
 .modeSelector .favoriteBtn {
-  padding: 2px;
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  padding: 4px;
   opacity: 0;
   transition: opacity 0.2s, transform 0.2s;
   filter: none;
-  font-size: 14px;
+  font-size: 12px;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  border-radius: 6px;
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  z-index: 10;
 }
+
 .modeSelector .favoriteBtn .icon {
-  font-size: 16px;
+  font-size: 14px;
   color: #ffd700;
 }
+
 .modeSelector li:hover .favoriteBtn {
   opacity: 1;
 }
+
 .modeSelector li.isFavorite .favoriteBtn {
   opacity: 1;
 }
+
 .modeSelector li.isFavorite button:not(.favoriteBtn) {
-  filter: grayscale(0) brightness(1.2);
-  border: 1px solid rgba(255, 215, 0, 0.3);
+  border: 2px solid rgba(255, 215, 0, 0.5);
+  background: rgba(255, 215, 0, 0.08);
 }
+
+.modeSelector li.isFavorite button:not(.favoriteBtn):hover {
+  border-color: rgba(255, 215, 0, 0.7);
+  background: rgba(255, 215, 0, 0.12);
+}
+
 .favoriteBtn:hover {
-  transform: scale(1.2);
+  transform: scale(1.15);
+  background: rgba(255, 215, 0, 0.2);
 }
+
 .favoriteBtn:active {
-  transform: scale(0.9);
+  transform: scale(0.95);
 }
+
 @media (max-width: 768px) {
-  .modeSelector button {
-    font-size: 14px;
+  .modeSelector {
+    padding: 8px;
+    gap: 6px;
   }
+
+  .modeSelector button {
+    font-size: 11px;
+    padding: 8px 10px;
+    min-width: 75px;
+  }
+
+  .modeSelector button span {
+    font-size: 20px;
+  }
+
+  .modeSelector button p {
+    font-size: 10px;
+  }
+
   .modeSelector .favoriteBtn {
     opacity: 1;
+  }
+
+  .modeSelector li.favoritesLabel {
+    padding: 4px 8px;
+  }
+
+  .modeSelector li.favoritesLabel .labelText {
+    font-size: 10px;
   }
 }
 .startButton {
@@ -701,7 +820,7 @@ main {
   z-index: 1000;
   background: rgba(0, 0, 0, 0.9);
   backdrop-filter: blur(10px);
-  padding: 15px 30px;
+  padding: 12px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -709,7 +828,7 @@ main {
 }
 
 .navBrand a {
-  font-size: 24px;
+  font-size: 20px;
   font-weight: bold;
   color: #fff;
   text-decoration: none;
@@ -717,17 +836,19 @@ main {
 
 .navLinks {
   display: flex;
-  gap: 20px;
+  gap: 12px;
   align-items: center;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 }
 
 .navLinks a {
   color: #fff;
   text-decoration: none;
-  padding: 8px 16px;
+  padding: 6px 12px;
   border-radius: 5px;
   transition: all 0.2s;
+  font-size: 14px;
+  white-space: nowrap;
 }
 
 .navLinks a:hover,
@@ -735,10 +856,89 @@ main {
   background: rgba(255, 255, 255, 0.1);
 }
 
+/* User Menu */
+.userMenu {
+  position: relative;
+}
+
+.userMenuButton {
+  background: rgba(255, 255, 255, 0.08);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  padding: 6px 12px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.userMenuButton:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.userMenuButton .icon {
+  font-size: 24px;
+  color: #fff;
+}
+
+.userMenuDropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  min-width: 200px;
+  background: rgba(0, 0, 0, 0.95);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 8px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  animation: slideDown 0.2s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.userMenuDropdown a,
+.userMenuDropdown button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 10px 14px;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: all 0.2s;
+  font-size: 14px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.userMenuDropdown a:hover,
+.userMenuDropdown button:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.menuDivider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.1);
+  margin: 8px 0;
+}
+
 /* Usage Limit Banner */
 .usageLimitBanner {
   position: fixed;
-  top: 70px;
+  top: 60px;
   left: 0;
   right: 0;
   z-index: 999;
@@ -789,7 +989,7 @@ main {
 
 /* Pricing Page */
 .pricingPage {
-  padding: 100px 30px 50px;
+  padding: 80px 30px 50px;
   max-width: 1200px;
   margin: 0 auto;
 }
@@ -996,7 +1196,7 @@ main {
 
 /* Subscription Page */
 .subscriptionPage {
-  padding: 100px 30px 50px;
+  padding: 80px 30px 50px;
   max-width: 800px;
   margin: 0 auto;
 }
@@ -1203,24 +1403,48 @@ main {
 
 @media (max-width: 768px) {
   .appNav {
-    flex-direction: column;
-    gap: 15px;
-    padding: 15px;
+    padding: 10px 15px;
+  }
+
+  .navBrand a {
+    font-size: 18px;
   }
 
   .navLinks {
-    flex-wrap: wrap;
-    justify-content: center;
+    gap: 8px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    max-width: calc(100vw - 150px);
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .navLinks::-webkit-scrollbar {
+    display: none;
+  }
+
+  .navLinks a {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+
+  .userMenuButton .icon {
+    font-size: 20px;
+  }
+
+  .userMenuDropdown {
+    right: -10px;
   }
 
   .usageLimitBanner {
-    top: 120px;
-    flex-wrap: wrap;
+    top: 50px;
+    padding: 10px 15px;
+    font-size: 12px;
   }
 
   .pricingPage,
   .subscriptionPage {
-    padding: 150px 20px 30px;
+    padding: 70px 20px 30px;
   }
 
   .pricingHeader h1 {
@@ -1494,6 +1718,69 @@ main {
 
 .tipIcon {
   font-size: 14px;
+}
+
+/* Minimal Empty State - Compact Version */
+.emptyState.minimal {
+  min-width: auto;
+  max-width: 400px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+}
+
+.emptyState.minimal .emptyStateHeader {
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.emptyState.minimal .welcomeIcon {
+  font-size: 42px;
+}
+
+.emptyState.minimal .welcomeIcon .icon {
+  font-size: 42px;
+}
+
+.emptyState.minimal .emptyStateHeader h3 {
+  font-size: 18px;
+}
+
+.emptyState.minimal .emptyStateHeader .subtitle {
+  font-size: 13px;
+}
+
+.emptyState.minimal .emptyStateTips.compact {
+  display: flex;
+  gap: 12px;
+  margin-top: 0;
+}
+
+.emptyState.minimal .emptyStateTips.compact .tip {
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  font-size: 11px;
+  transition: all 0.2s ease;
+}
+
+.emptyState.minimal .emptyStateTips.compact .tip:hover {
+  background: rgba(255, 255, 255, 0.12);
+  transform: translateY(-2px);
+}
+
+.emptyState.minimal .emptyStateTips.compact .tipIcon {
+  font-size: 20px;
+}
+
+.emptyState.minimal .emptyStateTips.compact .tip p {
+  margin: 0;
+  font-weight: 500;
 }
 
 /* Error State */

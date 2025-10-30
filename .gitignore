@@ -24,3 +24,23 @@ dist-ssr
 *.sw?
 
 .vercel
+
+# Sensitive files with API keys and secrets
+.env.local.backup
+.env.local.live
+.env.production
+.claude/mcp-servers.json
+settings.local.json
+
+# Deployment scripts with credentials
+setup-live-stripe.bat
+complete-live-setup.bat
+deploy-*.bat
+temp_*.ps1
+
+# Documentation with embedded test keys
+CHECKOUT_FIX_GUIDE.md
+PORTAL_FIX_GUIDE.md
+PORTAL_DEBUG_GUIDE.md
+DEPLOYMENT_INSTRUCTIONS.md
+STRIPE_LIVE_MODE_SUMMARY.md

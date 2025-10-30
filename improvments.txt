@@ -1,0 +1,144 @@
+Animated mode transitions - Smooth fade/slide animations when switching between AI
+  modes
+  - Live preview filters - Show preview of mode effect on webcam feed before taking photo
+  - Photo loading states - Add skeleton screens and shimmer effects while images process
+  - Confetti/celebration effects - Trigger when photos complete processing successfully
+  - Progress indicators - Show AI processing stages: "Uploading... → Analyzing... →
+  Transforming..."
+  - Custom cursor - Camera icon cursor on photo booth page
+  - Gradient backgrounds - Subtle animated gradients for different modes/pages
+  - Gallery masonry layout - Pinterest-style grid instead of uniform columns
+
+  Typography & Branding
+
+  - Custom logo animation - Animated "GemBooth" wordmark on landing page
+  - Mode cards redesign - Larger emoji, description text, example thumbnails
+  - Badge system - Show tier badges (Free/Pro/Premium) with subtle glow effects
+  - Font hierarchy - Use display font for headers, readable font for body
+
+  ⚡ Functionality Enhancements
+
+  Photo Booth Features
+
+  - Batch processing - Take multiple photos in sequence (3-5 second timer between shots)
+  - Comparison slider - Before/after slider to compare original vs transformed
+  - Multiple mode combo - Apply 2-3 modes to same photo, create collage
+  - Video recording - 5-10 second video transformation (more complex, higher tier)
+  - Face filters - Add fun overlays before AI transformation (glasses, hats, etc.)
+  - Timer/countdown - Visual countdown with sound before photo capture
+  - Photo retakes - Allow 3 quick retakes before committing to transformation
+  - Favorites system - Star/heart favorite photos for quick access
+
+  AI & Generation
+
+  - Style strength slider - Control intensity of AI transformation (subtle → dramatic)
+  - Negative prompts - Specify what NOT to include in transformations
+  - Remix photos - Use existing photo as reference for new AI generation
+  - Prompt templates - Pre-built prompts for common scenarios (profile pic, fantasy art,
+  etc.)
+  - AI upscaling - Enhance resolution of generated images
+  - Background removal - Auto-remove background, add custom backgrounds
+  - Face swap - Upload reference faces, swap into generated images
+  - Text-to-photo-to-mode - Generate image from text, then apply transformation mode
+
+  Social & Sharing
+
+  - Direct sharing buttons - Instagram, TikTok, Twitter with pre-filled captions
+  - QR code sharing - Generate QR code for each photo/GIF
+  - Public gallery - Opt-in to share creations publicly (with moderation)
+  - Collaboration mode - Multiple users contribute photos to shared GIF/collage
+  - Email delivery - Send photos/GIFs directly to email
+  - Watermark customization - Add custom text/logo (Pro/Premium feature)
+  - Social preview cards - Nice OG images when sharing links
+
+  Gallery & Organization
+
+  - Collections/Albums - Group photos by event, date, mode
+  - Search & filters - Search by mode, date, prompt text
+  - Bulk actions - Select multiple photos to download/delete/share
+  - Sort options - By date, mode, favorites, most shared
+  - Photo editing - Basic crop, rotate, brightness/contrast adjustments
+  - Statistics dashboard - Show total photos, favorite mode, usage charts
+  - Export to PDF - Create photo book from gallery
+  - Slideshow mode - Auto-play gallery with transitions
+
+  📱 Mobile & Accessibility
+
+  Mobile Optimizations
+
+  - Swipe gestures - Swipe between photos, modes, gallery tabs
+  - Haptic feedback - Vibrate on photo capture, GIF creation complete
+  - PWA enhancements - Better offline support, install prompts
+  - Native camera integration - Use device camera API for better quality
+  - Portrait mode support - Vertical layouts optimized for phone use
+  - Quick actions - Home screen shortcuts (Android/iOS)
+
+  Accessibility
+
+  - Screen reader support - Proper ARIA labels for all interactive elements
+  - Keyboard navigation - Full keyboard control of photo booth
+  - High contrast mode - Alternative theme for visibility
+  - Text size controls - User-adjustable font sizes
+  - Alt text for images - Auto-generate descriptive alt text using AI
+  - Reduced motion option - Disable animations for motion sensitivity
+
+  🚀 Performance & Technical
+
+  Speed Improvements
+
+  - Image compression - Optimize file sizes before upload
+  - Lazy loading - Load gallery images on scroll
+  - Edge caching - CDN for faster image delivery
+  - Parallel processing - Process multiple photos simultaneously (Premium)
+  - WebP format - Use modern image formats for smaller sizes
+  - Service workers - Cache assets for faster repeat visits
+
+  Developer Experience
+
+  - Analytics integration - Track popular modes, conversion rates
+  - A/B testing framework - Test different UI variations
+  - Error monitoring - Sentry/LogRocket for bug tracking
+  - Performance monitoring - Track page load times, API latency
+
+  💎 Monetization & Engagement
+
+  Premium Features
+
+  - Priority processing - Skip queue for faster transformations
+  - HD/4K exports - Higher resolution outputs
+  - No watermarks - Remove GemBooth branding
+  - Unlimited cloud storage - Free tier: 100 photos, Pro: 1000, Premium: unlimited
+  - Custom modes - Create and save personalized AI modes
+  - Batch upload - Upload 10+ photos at once (API integration)
+  - Commercial license - Use photos for business/marketing
+
+  Gamification
+
+  - Daily challenges - "Create a Renaissance selfie today!"
+  - Achievement badges - "First GIF", "100 Photos", "Mode Master"
+  - Streak system - Daily usage streaks unlock bonuses
+  - Referral program - Invite friends, earn free Pro days
+  - Leaderboard - Most creative photos, voted by community
+  - Photo contests - Monthly themed contests with prizes
+
+  Community Features
+
+  - Comments & reactions - Allow engagement on public gallery photos
+  - Remix others' work - Use public photos as inspiration (with credit)
+  - Follow favorite creators - Social network aspect
+  - Trending page - Most popular recent creations
+  - Creator profiles - Portfolio pages for power users
+
+  🎯 Quick Wins (High Impact, Low Effort)
+
+  1. Add mode descriptions - Short tooltip explaining each mode
+  2. Keyboard shortcuts - Spacebar to capture, R to retake, etc.
+  3. Toast notifications - Success/error messages with better styling
+  4. Loading text variety - Randomize loading messages ("Channeling your inner
+  Picasso...")
+  5. Download all button - Bulk download all gallery items
+  6. Dark/light mode toggle - Optional light theme (keep dark as default)
+  7. Recent modes - Show 3-5 most recently used modes at top
+  8. Photo count badge - Show number of photos in gallery on nav
+  9. Tutorial overlay - First-time user walkthrough
+  10. Suggest modes - AI recommends mode based on photo content

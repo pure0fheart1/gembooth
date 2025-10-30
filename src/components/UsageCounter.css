@@ -1,0 +1,404 @@
+/* Floating Usage Counter Styles */
+
+.usageCounterFloating {
+  position: fixed;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.95);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
+  width: 320px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+  transition: all 0.3s ease;
+  will-change: transform;
+  overflow: hidden;
+}
+
+.usageCounterFloating.dragging {
+  cursor: grabbing;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.usageCounterFloating.minimized {
+  width: 320px;
+  height: auto;
+}
+
+/* Drag Handle */
+.usageCounterDragHandle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  cursor: grab;
+  user-select: none;
+  transition: background 0.2s ease;
+}
+
+.usageCounterDragHandle:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.usageCounterDragHandle:active {
+  cursor: grabbing;
+}
+
+/* Drag Indicator */
+.dragIndicator {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  pointer-events: none;
+}
+
+.dragIndicator span {
+  width: 3px;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 50%;
+}
+
+/* Control Buttons */
+.usageCounterControls {
+  display: flex;
+  gap: 6px;
+}
+
+.controlButton {
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  padding: 0;
+}
+
+.controlButton:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  transform: scale(1.1);
+}
+
+.controlButton.close:hover {
+  background: rgba(255, 107, 107, 0.2);
+  color: #ff6b6b;
+}
+
+.controlButton:active {
+  transform: scale(0.95);
+}
+
+/* Header */
+.usageCounterHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 16px 12px;
+  animation: fadeIn 0.3s ease;
+}
+
+.usageTierBadge {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+}
+
+.upgradeLink {
+  color: #667eea;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+.upgradeLink:hover {
+  background: rgba(102, 126, 234, 0.1);
+  color: #8b9cf7;
+}
+
+/* Metrics Container */
+.usageMetrics {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 0 16px 16px;
+  animation: slideDown 0.3s ease;
+  overflow: hidden;
+}
+
+.usageCounterFloating.minimized .usageMetrics {
+  display: none;
+}
+
+.usageMetric {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 12px;
+  transition: all 0.2s ease;
+}
+
+.usageMetric:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.usageMetricHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.usageMetricIcon {
+  font-size: 20px;
+  line-height: 1;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.usageMetricLabel {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 14px;
+  font-weight: 600;
+  flex: 1;
+}
+
+.usageMetricValue {
+  font-size: 16px;
+  font-weight: 700;
+  color: white;
+  padding: 4px 10px;
+  border-radius: 6px;
+  min-width: 40px;
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.usageMetricValue.good {
+  background: rgba(16, 185, 129, 0.2);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.usageMetricValue.warning {
+  background: rgba(245, 158, 11, 0.2);
+  color: #f59e0b;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.usageMetricValue.critical {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+/* Progress Bar */
+.usageProgressBar {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 6px;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.usageProgressFill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.5s ease, background-color 0.3s ease;
+  box-shadow: 0 0 8px currentColor;
+}
+
+.usageProgressFill.good {
+  background: linear-gradient(90deg, #10b981, #059669);
+}
+
+.usageProgressFill.warning {
+  background: linear-gradient(90deg, #f59e0b, #d97706);
+}
+
+.usageProgressFill.critical {
+  background: linear-gradient(90deg, #ef4444, #dc2626);
+  animation: pulseGlow 1.5s ease-in-out infinite;
+}
+
+/* Footer */
+.usageMetricFooter {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 11px;
+  text-align: right;
+  font-weight: 500;
+}
+
+.usageMetricFooter.unlimited {
+  text-align: center;
+  color: #10b981;
+  font-weight: 700;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Restore Button (when widget is closed) */
+.usageCounterRestoreButton {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(102, 126, 234, 0.4);
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9998;
+  animation: slideInUp 0.4s ease;
+}
+
+.usageCounterRestoreButton:hover {
+  transform: scale(1.1) rotate(5deg);
+  box-shadow: 0 6px 24px rgba(102, 126, 234, 0.6);
+}
+
+.usageCounterRestoreButton:active {
+  transform: scale(0.95);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .usageCounterFloating {
+    width: 280px;
+  }
+
+  .usageCounterFloating.minimized {
+    width: 280px;
+  }
+
+  .usageCounterRestoreButton {
+    width: 48px;
+    height: 48px;
+    font-size: 20px;
+    bottom: 16px;
+    right: 16px;
+  }
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 8px currentColor;
+  }
+  50% {
+    box-shadow: 0 0 16px currentColor;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(239, 68, 68, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+  }
+}
+
+.usageMetricValue.critical {
+  animation: pulse 2s infinite;
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .usageCounterFloating,
+  .controlButton,
+  .usageProgressFill,
+  .usageCounterRestoreButton,
+  .usageMetrics,
+  .usageCounterHeader {
+    animation: none;
+    transition: none;
+  }
+}
+
+/* Touch device optimization */
+@media (hover: none) and (pointer: coarse) {
+  .controlButton {
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
+  }
+
+  .usageCounterDragHandle {
+    padding: 12px;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .usageCounterFloating {
+    border: 2px solid rgba(255, 255, 255, 0.4);
+  }
+
+  .controlButton {
+    border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+}

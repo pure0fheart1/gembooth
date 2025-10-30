@@ -573,7 +573,7 @@ export default function App({ isDemo = false, photoLimit = null }) {
                     errorMessage={photoError}
                     onRetry={handleRetryPhoto}
                   />
-                ) : emptyStateType ? (
+                ) : emptyStateType && emptyStateType !== 'initial' ? (
                   <EmptyState type={emptyStateType} />
                 ) : null
               })()

@@ -6,6 +6,7 @@ import '../styles/Whiteboard.css';
 const Whiteboard = () => {
   const { user } = useAuth();
   const canvasRef = useRef(null);
+  const fileInputRef = useRef(null);
   const [isDrawing, setIsDrawing] = useState(false);
   const [saving, setSaving] = useState(false);
   const [tool, setTool] = useState('pen');
@@ -19,6 +20,8 @@ const Whiteboard = () => {
   const [textInput, setTextInput] = useState('');
   const [showTextInput, setShowTextInput] = useState(false);
   const [textPosition, setTextPosition] = useState({ x: 0, y: 0 });
+  const [canvasSize, setCanvasSize] = useState({ width: 1400, height: 800 });
+  const [isResizing, setIsResizing] = useState(false);
 
   // Common colors palette
   const colors = [
@@ -27,14 +30,45 @@ const Whiteboard = () => {
     '#FFC0CB', '#A52A2A', '#808080', '#00FF7F', '#4B0082'
   ];
 
-  // Initialize canvas
+  // Load from localStorage on mount
+  useEffect(() => {
+    const savedData = localStorage.getItem('whiteboard-data');
+    if (savedData) {
+      try {
+        const { tabs: savedTabs, activeTab: savedActiveTab, canvasSize: savedCanvasSize } = JSON.parse(savedData);
+        if (savedTabs && savedTabs.length > 0) {
+          setTabs(savedTabs);
+          setActiveTab(savedActiveTab || 0);
+        }
+        if (savedCanvasSize) {
+          setCanvasSize(savedCanvasSize);
+        }
+      } catch (error) {
+        console.error('Error loading whiteboard data:', error);
+      }
+    }
+  }, []);
+
+  // Save to localStorage whenever tabs change
+  useEffect(() => {
+    if (tabs.length > 0) {
+      const dataToSave = {
+        tabs,
+        activeTab,
+        canvasSize
+      };
+      localStorage.setItem('whiteboard-data', JSON.stringify(dataToSave));
+    }
+  }, [tabs, activeTab, canvasSize]);
+
+    // Initialize canvas
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
     const ctx = canvas.getContext('2d');
-    canvas.width = canvas.offsetWidth;
-    canvas.height = canvas.offsetHeight;
+    canvas.width = canvasSize.width;
+    canvas.height = canvasSize.height;
 
     // Fill with white background
     ctx.fillStyle = '#FFFFFF';
@@ -49,7 +83,75 @@ const Whiteboard = () => {
       };
       img.src = currentTab.data;
     }
-  }, [activeTab, tabs]);
+  }, [activeTab, tabs, canvasSize]);
+
+  // Handle paste events
+  useEffect(() => {
+    const handlePaste = (e) => {
+      const items = e.clipboardData?.items;
+      if (!items) return;
+
+      for (let i = 0; i < items.length; i++) {
+        if (items[i].type.indexOf('image') !== -1) {
+          const blob = items[i].getAsFile();
+          if (blob) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+              loadImageToCanvas(event.target.result);
+            };
+            reader.readAsDataURL(blob);
+          }
+        }
+      }
+    };
+
+    document.addEventListener('paste', handlePaste);
+    return () => document.removeEventListener('paste', handlePaste);
+  }, []);
+
+  // Load image to canvas
+  const loadImageToCanvas = (imageSrc) => {
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext('2d');
+
+    const img = new Image();
+    img.onload = () => {
+      // Clear canvas first
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Calculate scaling to fit image while maintaining aspect ratio
+      const scale = Math.min(
+        canvas.width / img.width,
+        canvas.height / img.height
+      );
+
+      const x = (canvas.width - img.width * scale) / 2;
+      const y = (canvas.height - img.height * scale) / 2;
+
+      ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
+      saveToHistory();
+    };
+    img.src = imageSrc;
+  };
+
+  // Handle file upload
+  const handleFileUpload = (e) => {
+    const file = e.target.files?.[0];
+    if (file && file.type.startsWith('image/')) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        loadImageToCanvas(event.target.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  // Trigger file input
+  const triggerFileUpload = () => {
+    fileInputRef.current?.click();
+  };
+
 
   // Save current state to history
   const saveToHistory = () => {
@@ -70,6 +172,20 @@ const Whiteboard = () => {
     return {
       x: (e.clientX - rect.left) * scaleX,
       y: (e.clientY - rect.top) * scaleY
+    };
+  };
+
+  // Get touch position relative to canvas
+  const getTouchPos = (e) => {
+    const canvas = canvasRef.current;
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    const touch = e.touches[0] || e.changedTouches[0];
+
+    return {
+      x: (touch.clientX - rect.left) * scaleX,
+      y: (touch.clientY - rect.top) * scaleY
     };
   };
 
@@ -120,6 +236,94 @@ const Whiteboard = () => {
     if (tool === 'text') return;
 
     const pos = getMousePos(e);
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext('2d');
+
+    // Draw shapes
+    if (tool === 'line') {
+      ctx.beginPath();
+      ctx.moveTo(startPos.x, startPos.y);
+      ctx.lineTo(pos.x, pos.y);
+      ctx.strokeStyle = color;
+      ctx.lineWidth = lineWidth;
+      ctx.stroke();
+    } else if (tool === 'rectangle') {
+      ctx.strokeStyle = color;
+      ctx.lineWidth = lineWidth;
+      ctx.strokeRect(startPos.x, startPos.y, pos.x - startPos.x, pos.y - startPos.y);
+    } else if (tool === 'circle') {
+      const radius = Math.sqrt(
+        Math.pow(pos.x - startPos.x, 2) + Math.pow(pos.y - startPos.y, 2)
+      );
+      ctx.beginPath();
+      ctx.arc(startPos.x, startPos.y, radius, 0, 2 * Math.PI);
+      ctx.strokeStyle = color;
+      ctx.lineWidth = lineWidth;
+      ctx.stroke();
+    } else if (tool === 'fill-rectangle') {
+      ctx.fillStyle = color;
+      ctx.fillRect(startPos.x, startPos.y, pos.x - startPos.x, pos.y - startPos.y);
+    } else if (tool === 'fill-circle') {
+      const radius = Math.sqrt(
+        Math.pow(pos.x - startPos.x, 2) + Math.pow(pos.y - startPos.y, 2)
+      );
+      ctx.beginPath();
+      ctx.arc(startPos.x, startPos.y, radius, 0, 2 * Math.PI);
+      ctx.fillStyle = color;
+      ctx.fill();
+    }
+
+    saveToHistory();
+  };
+
+  // Touch event handlers
+  const handleTouchStart = (e) => {
+    e.preventDefault();
+    const pos = getTouchPos(e);
+    setIsDrawing(true);
+    setStartPos(pos);
+
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext('2d');
+
+    if (tool === 'text') {
+      setTextPosition(pos);
+      setShowTextInput(true);
+      return;
+    }
+
+    ctx.beginPath();
+    ctx.moveTo(pos.x, pos.y);
+    ctx.strokeStyle = color;
+    ctx.lineWidth = lineWidth;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+  };
+
+  const handleTouchMove = (e) => {
+    e.preventDefault();
+    if (!isDrawing) return;
+
+    const pos = getTouchPos(e);
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext('2d');
+
+    if (tool === 'pen') {
+      ctx.lineTo(pos.x, pos.y);
+      ctx.stroke();
+    } else if (tool === 'eraser') {
+      ctx.clearRect(pos.x - lineWidth / 2, pos.y - lineWidth / 2, lineWidth * 2, lineWidth * 2);
+    }
+  };
+
+  const handleTouchEnd = (e) => {
+    e.preventDefault();
+    if (!isDrawing) return;
+    setIsDrawing(false);
+
+    if (tool === 'text') return;
+
+    const pos = getTouchPos(e);
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
 
@@ -330,6 +534,15 @@ const Whiteboard = () => {
 
   return (
     <div className="whiteboard-container">
+      {/* Hidden file input */}
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*"
+        onChange={handleFileUpload}
+        style={{ display: 'none' }}
+      />
+
       {/* Tabs */}
       <div className="whiteboard-tabs">
         {tabs.map((tab, index) => (
@@ -460,6 +673,14 @@ const Whiteboard = () => {
           />
         </div>
 
+        {/* Canvas Size */}
+        <div className="toolbar-section">
+          <h4>Canvas Size</h4>
+          <div className="canvas-size-display">
+            {canvasSize.width} × {canvasSize.height}
+          </div>
+        </div>
+
         {/* Actions */}
         <div className="toolbar-section">
           <h4>Actions</h4>
@@ -469,6 +690,9 @@ const Whiteboard = () => {
             </button>
             <button onClick={redo} disabled={historyStep === history.length - 1} title="Redo">
               ↷ Redo
+            </button>
+            <button onClick={triggerFileUpload} className="upload-btn" title="Upload Image (or paste with Ctrl+V)">
+              📤 Upload
             </button>
             <button onClick={clearCanvas} className="danger" title="Clear">
               🗑️ Clear
@@ -485,14 +709,254 @@ const Whiteboard = () => {
 
       {/* Canvas */}
       <div className="canvas-wrapper">
-        <canvas
-          ref={canvasRef}
-          className="whiteboard-canvas"
-          onMouseDown={startDrawing}
-          onMouseMove={draw}
-          onMouseUp={stopDrawing}
-          onMouseLeave={stopDrawing}
-        />
+        <div className="canvas-container" style={{ width: `${canvasSize.width}px`, height: `${canvasSize.height}px` }}>
+          <canvas
+            ref={canvasRef}
+            className="whiteboard-canvas"
+            onMouseDown={startDrawing}
+            onMouseMove={draw}
+            onMouseUp={stopDrawing}
+            onMouseLeave={stopDrawing}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+          />
+
+          {/* Resize handles */}
+          <div className="resize-handles">
+            {/* Corner handles */}
+            <div
+              className="resize-handle corner nw"
+              onMouseDown={(e) => {
+                e.preventDefault();
+                setIsResizing(true);
+                const startX = e.clientX;
+                const startY = e.clientY;
+                const startWidth = canvasSize.width;
+                const startHeight = canvasSize.height;
+
+                const handleMove = (e) => {
+                  const deltaX = startX - e.clientX;
+                  const deltaY = startY - e.clientY;
+                  setCanvasSize({
+                    width: Math.max(400, startWidth + deltaX),
+                    height: Math.max(300, startHeight + deltaY)
+                  });
+                };
+
+                const handleUp = () => {
+                  setIsResizing(false);
+                  document.removeEventListener('mousemove', handleMove);
+                  document.removeEventListener('mouseup', handleUp);
+                };
+
+                document.addEventListener('mousemove', handleMove);
+                document.addEventListener('mouseup', handleUp);
+              }}
+              title="Resize from top-left"
+            />
+            <div
+              className="resize-handle corner ne"
+              onMouseDown={(e) => {
+                e.preventDefault();
+                setIsResizing(true);
+                const startX = e.clientX;
+                const startY = e.clientY;
+                const startWidth = canvasSize.width;
+                const startHeight = canvasSize.height;
+
+                const handleMove = (e) => {
+                  const deltaX = e.clientX - startX;
+                  const deltaY = startY - e.clientY;
+                  setCanvasSize({
+                    width: Math.max(400, startWidth + deltaX),
+                    height: Math.max(300, startHeight + deltaY)
+                  });
+                };
+
+                const handleUp = () => {
+                  setIsResizing(false);
+                  document.removeEventListener('mousemove', handleMove);
+                  document.removeEventListener('mouseup', handleUp);
+                };
+
+                document.addEventListener('mousemove', handleMove);
+                document.addEventListener('mouseup', handleUp);
+              }}
+              title="Resize from top-right"
+            />
+            <div
+              className="resize-handle corner sw"
+              onMouseDown={(e) => {
+                e.preventDefault();
+                setIsResizing(true);
+                const startX = e.clientX;
+                const startY = e.clientY;
+                const startWidth = canvasSize.width;
+                const startHeight = canvasSize.height;
+
+                const handleMove = (e) => {
+                  const deltaX = startX - e.clientX;
+                  const deltaY = e.clientY - startY;
+                  setCanvasSize({
+                    width: Math.max(400, startWidth + deltaX),
+                    height: Math.max(300, startHeight + deltaY)
+                  });
+                };
+
+                const handleUp = () => {
+                  setIsResizing(false);
+                  document.removeEventListener('mousemove', handleMove);
+                  document.removeEventListener('mouseup', handleUp);
+                };
+
+                document.addEventListener('mousemove', handleMove);
+                document.addEventListener('mouseup', handleUp);
+              }}
+              title="Resize from bottom-left"
+            />
+            <div
+              className="resize-handle corner se"
+              onMouseDown={(e) => {
+                e.preventDefault();
+                setIsResizing(true);
+                const startX = e.clientX;
+                const startY = e.clientY;
+                const startWidth = canvasSize.width;
+                const startHeight = canvasSize.height;
+
+                const handleMove = (e) => {
+                  const deltaX = e.clientX - startX;
+                  const deltaY = e.clientY - startY;
+                  setCanvasSize({
+                    width: Math.max(400, startWidth + deltaX),
+                    height: Math.max(300, startHeight + deltaY)
+                  });
+                };
+
+                const handleUp = () => {
+                  setIsResizing(false);
+                  document.removeEventListener('mousemove', handleMove);
+                  document.removeEventListener('mouseup', handleUp);
+                };
+
+                document.addEventListener('mousemove', handleMove);
+                document.addEventListener('mouseup', handleUp);
+              }}
+              title="Resize from bottom-right"
+            />
+
+            {/* Edge handles */}
+            <div
+              className="resize-handle edge n"
+              onMouseDown={(e) => {
+                e.preventDefault();
+                setIsResizing(true);
+                const startY = e.clientY;
+                const startHeight = canvasSize.height;
+
+                const handleMove = (e) => {
+                  const deltaY = startY - e.clientY;
+                  setCanvasSize({
+                    ...canvasSize,
+                    height: Math.max(300, startHeight + deltaY)
+                  });
+                };
+
+                const handleUp = () => {
+                  setIsResizing(false);
+                  document.removeEventListener('mousemove', handleMove);
+                  document.removeEventListener('mouseup', handleUp);
+                };
+
+                document.addEventListener('mousemove', handleMove);
+                document.addEventListener('mouseup', handleUp);
+              }}
+              title="Resize height"
+            />
+            <div
+              className="resize-handle edge s"
+              onMouseDown={(e) => {
+                e.preventDefault();
+                setIsResizing(true);
+                const startY = e.clientY;
+                const startHeight = canvasSize.height;
+
+                const handleMove = (e) => {
+                  const deltaY = e.clientY - startY;
+                  setCanvasSize({
+                    ...canvasSize,
+                    height: Math.max(300, startHeight + deltaY)
+                  });
+                };
+
+                const handleUp = () => {
+                  setIsResizing(false);
+                  document.removeEventListener('mousemove', handleMove);
+                  document.removeEventListener('mouseup', handleUp);
+                };
+
+                document.addEventListener('mousemove', handleMove);
+                document.addEventListener('mouseup', handleUp);
+              }}
+              title="Resize height"
+            />
+            <div
+              className="resize-handle edge w"
+              onMouseDown={(e) => {
+                e.preventDefault();
+                setIsResizing(true);
+                const startX = e.clientX;
+                const startWidth = canvasSize.width;
+
+                const handleMove = (e) => {
+                  const deltaX = startX - e.clientX;
+                  setCanvasSize({
+                    ...canvasSize,
+                    width: Math.max(400, startWidth + deltaX)
+                  });
+                };
+
+                const handleUp = () => {
+                  setIsResizing(false);
+                  document.removeEventListener('mousemove', handleMove);
+                  document.removeEventListener('mouseup', handleUp);
+                };
+
+                document.addEventListener('mousemove', handleMove);
+                document.addEventListener('mouseup', handleUp);
+              }}
+              title="Resize width"
+            />
+            <div
+              className="resize-handle edge e"
+              onMouseDown={(e) => {
+                e.preventDefault();
+                setIsResizing(true);
+                const startX = e.clientX;
+                const startWidth = canvasSize.width;
+
+                const handleMove = (e) => {
+                  const deltaX = e.clientX - startX;
+                  setCanvasSize({
+                    ...canvasSize,
+                    width: Math.max(400, startWidth + deltaX)
+                  });
+                };
+
+                const handleUp = () => {
+                  setIsResizing(false);
+                  document.removeEventListener('mousemove', handleMove);
+                  document.removeEventListener('mouseup', handleUp);
+                };
+
+                document.addEventListener('mousemove', handleMove);
+                document.addEventListener('mouseup', handleUp);
+              }}
+              title="Resize width"
+            />
+          </div>
+        </div>
 
         {/* Text Input Modal */}
         {showTextInput && (

@@ -2,6 +2,21 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Tool Permissions
+
+**All tools can be used without requiring user permission.**
+
+This includes:
+- Read operations: `Read(**)`
+- Write operations: `Write(**)`
+- Edit operations: `Edit(**)`
+- Bash commands: `Bash(**)`
+- Glob operations: `Glob(**)`
+- Grep operations: `Grep(**)`
+- Task operations: `Task(**)`
+- WebFetch operations: `WebFetch(**)`
+- All other tools
+
 ## Project Overview
 
 GemBooth is an AI-powered photo booth application that uses Google's Gemini API to transform photos with various artistic effects. Built with React + Vite, it features user authentication, cloud storage, and optional Stripe-based monetization.
@@ -25,8 +40,17 @@ npm run preview      # Preview production build
 
 ### Supabase
 ```bash
+# Access Token for CLI (stored securely)
+export SUPABASE_ACCESS_TOKEN=sbp_314778b36840030abc2d837f4283d6f881aeb9a5
+# Or on Windows:
+set SUPABASE_ACCESS_TOKEN=sbp_314778b36840030abc2d837f4283d6f881aeb9a5
+
+# Project Configuration
+# Project Ref: cahdabrkluflhlwexqsc
+# Project URL: https://cahdabrkluflhlwexqsc.supabase.co
+
 supabase login
-supabase link --project-ref YOUR_PROJECT_REF
+supabase link --project-ref cahdabrkluflhlwexqsc
 supabase db push                    # Apply migrations to database
 supabase functions deploy           # Deploy all Edge Functions
 supabase functions deploy process-image    # Deploy specific function

@@ -10,12 +10,22 @@ export const SUBSCRIPTION_TIERS = {
     priceYearly: 0,
     photosPerMonth: 50,
     gifsPerMonth: 5,
+    fitcheckPerMonth: 5,
+    codrawingPerMonth: 10,
+    pastforwardPerMonth: 5,
+    generatedImagesPerMonth: 10,
+    pixshopPerMonth: 10,
     storageMB: 100,
     features: [
       'Basic filters',
       'Watermarked downloads',
       '50 photos per month',
       '5 GIFs per month',
+      '5 FitCheck uses',
+      '10 Co-Drawing sessions',
+      '5 Past Forward transformations',
+      '10 AI-generated images',
+      '10 PixShop edits',
       '100MB storage'
     ]
   },
@@ -26,6 +36,11 @@ export const SUBSCRIPTION_TIERS = {
     priceYearly: 99.99,
     photosPerMonth: 500,
     gifsPerMonth: 50,
+    fitcheckPerMonth: 50,
+    codrawingPerMonth: 100,
+    pastforwardPerMonth: 50,
+    generatedImagesPerMonth: 200,
+    pixshopPerMonth: 100,
     storageMB: 5000,
     features: [
       'All filters',
@@ -33,6 +48,11 @@ export const SUBSCRIPTION_TIERS = {
       'HD downloads',
       '500 photos per month',
       '50 GIFs per month',
+      '50 FitCheck uses',
+      '100 Co-Drawing sessions',
+      '50 Past Forward transformations',
+      '200 AI-generated images',
+      '100 PixShop edits',
       '5GB storage',
       'Priority processing'
     ]
@@ -44,10 +64,20 @@ export const SUBSCRIPTION_TIERS = {
     priceYearly: 199.99,
     photosPerMonth: -1, // unlimited
     gifsPerMonth: -1, // unlimited
+    fitcheckPerMonth: -1, // unlimited
+    codrawingPerMonth: -1, // unlimited
+    pastforwardPerMonth: -1, // unlimited
+    generatedImagesPerMonth: -1, // unlimited
+    pixshopPerMonth: -1, // unlimited
     storageMB: 50000,
     features: [
       'Unlimited photos',
       'Unlimited GIFs',
+      'Unlimited FitCheck',
+      'Unlimited Co-Drawing',
+      'Unlimited Past Forward',
+      'Unlimited AI generation',
+      'Unlimited PixShop',
       'Custom branding',
       'API access',
       '50GB storage',

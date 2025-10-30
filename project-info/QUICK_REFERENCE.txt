@@ -1,0 +1,165 @@
+╔════════════════════════════════════════════════════════════════════════════════╗
+║                          GEMBOOTH QUICK REFERENCE CARD                         ║
+╚════════════════════════════════════════════════════════════════════════════════╝
+
+📋 PROJECT INFO
+  Name: GemBooth
+  Tech: React 18 + Vite + Supabase + Stripe + Gemini AI
+  Local: http://localhost:5173
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+⚡ QUICK COMMANDS
+
+Development:
+  npm run dev                              # Start dev server
+  npm run build                            # Production build
+  npm run preview                          # Preview build
+
+Supabase:
+  supabase db push                         # Apply migrations
+  supabase functions deploy                # Deploy all functions
+  supabase functions deploy [name]         # Deploy specific function
+  supabase functions logs [name]           # View function logs
+  supabase secrets set KEY=value           # Set secret
+  supabase secrets list                    # List secrets
+
+Deployment:
+  vercel                                   # Preview deployment
+  vercel --prod                            # Production deployment
+
+Stripe:
+  node get-stripe-prices.js                # Fetch product prices
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🔑 ENVIRONMENT VARIABLES (.env.local)
+
+  VITE_GEMINI_API_KEY                      # Google Gemini API key
+  VITE_SUPABASE_URL                        # Supabase project URL
+  VITE_SUPABASE_ANON_KEY                   # Supabase anonymous key
+  SUPABASE_SERVICE_ROLE_KEY                # Service role (Edge Functions only!)
+  VITE_STRIPE_PUBLISHABLE_KEY              # Stripe public key
+  STRIPE_SECRET_KEY                        # Stripe secret key
+  STRIPE_WEBHOOK_SECRET                    # Stripe webhook secret
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🗄️ SUPABASE TABLES
+
+  profiles                                 # User profiles
+  photos                                   # Photo metadata
+  gifs                                     # Generated GIFs
+  usage_stats                              # Analytics
+  subscription_tiers                       # Tier definitions
+  subscriptions                            # User subscriptions
+  usage_limits                             # Monthly limits
+  payments                                 # Payment history
+
+📦 STORAGE BUCKETS
+
+  user-photos                              # Input/output images (10MB limit)
+  user-gifs                                # Generated GIFs (50MB limit)
+
+⚙️ EDGE FUNCTIONS
+
+  process-image                            # Transform photos with Gemini
+  create-gif                               # Server-side GIF generation
+  create-checkout-session                  # Stripe checkout
+  create-portal-session                    # Stripe customer portal
+  stripe-webhook                           # Stripe event handler
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+💳 STRIPE TEST CARDS
+
+  Success:      4242 4242 4242 4242
+  Decline:      4000 0000 0000 0002
+  3D Secure:    4000 0025 0000 3155
+
+  Use any future expiry, any CVC, any ZIP
+
+💰 SUBSCRIPTION TIERS
+
+  Free          $0/month         10 photos, 2 GIFs/month
+  Pro           $9.99/month      100 photos, 20 GIFs/month
+  Premium       $19.99/month     Unlimited photos & GIFs
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🎨 AI MODES
+
+  🎨 Renaissance    📸 19th Century    🧔 Big Beard
+  🎭 Cartoon        ⚡ Anime           💥 Comic Book
+  🗿 Statue         🌈 Psychedelic     👴 Old
+  🍌 Banana         🎮 8-bit           ✏️ Custom
+  🕺 80s
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🔗 QUICK LINKS
+
+Supabase Dashboard:
+  https://supabase.com/dashboard
+
+Stripe Dashboard:
+  https://dashboard.stripe.com/test/dashboard
+
+Gemini API Console:
+  https://ai.google.dev
+
+Vercel Dashboard:
+  https://vercel.com/dashboard
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🔧 TROUBLESHOOTING
+
+Missing environment variables:
+  → Check .env.local exists and is properly formatted
+  → Restart dev server after changes
+
+Edge Function errors:
+  → Check logs: supabase functions logs [function-name]
+  → Verify secrets: supabase secrets list
+
+Photos not saving:
+  → Verify user is authenticated
+  → Check RLS policies in Supabase Dashboard
+  → Check browser Network tab for errors
+
+Stripe webhooks not working:
+  → Verify webhook URL in Stripe Dashboard
+  → Check webhook secret is set
+  → View delivery in Stripe Dashboard → Webhooks
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📚 DOCUMENTATION
+
+  README.md                                # Project overview
+  QUICK_START.md                           # 15-minute setup guide
+  CLAUDE.md                                # Claude Code guidance
+  SUPABASE_SETUP.md                        # Backend setup
+  MONETIZATION_SETUP.md                    # Stripe integration
+  DEPLOYMENT.md                            # Production deployment
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🖥️ PROJECT DASHBOARD
+
+Run the interactive dashboard for detailed information:
+
+  python project-info/gembooth_dashboard.py
+
+Or use the Windows launcher:
+
+  project-info/run-dashboard.bat
+
+For complete information dump:
+
+  python project-info/gembooth_dashboard.py --all
+
+╔════════════════════════════════════════════════════════════════════════════════╗
+║                       Last Updated: 2025-10-16                                 ║
+╚════════════════════════════════════════════════════════════════════════════════╝

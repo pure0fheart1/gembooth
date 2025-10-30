@@ -1,0 +1,1279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CMD & Powershell Cheat Sheet</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Use Inter font */
+        body {
+            font-family: "Inter", sans-serif;
+        }
+        
+        /* Custom styles for the active tab */
+        .tab-active {
+            border-bottom: 2px solid #22d3ee; /* cyan-400 */
+            color: #e0f2fe; /* cyan-50 */
+        }
+
+        /* Style for the copy button feedback */
+        .btn-copied {
+            background-color: #22c55e !important; /* green-500 */
+            color: white !important;
+        }
+
+        /* Ensure table layout is fixed for consistency */
+        table {
+            table-layout: fixed;
+        }
+        
+        /* Column widths */
+        .col-command { width: 35%; }
+        .col-desc { width: 45%; }
+        .col-action { width: 20%; }
+
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-200 font-sans min-h-screen">
+
+    <div class="container mx-auto p-4 sm:p-6 md:p-10">
+        <h1 class="text-3xl md:text-4xl font-bold text-center text-cyan-400 mb-8">
+            CMD & Powershell Cheat Sheet
+        </h1>
+
+        <!-- Tab Navigation -->
+        <div class="flex justify-center border-b border-gray-700 mb-6">
+            <button id="tab-cmd" class="tab-btn tab-active py-3 px-6 font-semibold text-lg transition-all duration-200 focus:outline-none">
+                CMD (Command Prompt)
+            </button>
+            <button id="tab-ps" class="tab-btn py-3 px-6 font-semibold text-lg text-gray-500 hover:text-gray-300 transition-all duration-200 focus:outline-none">
+                Powershell
+            </button>
+        </div>
+
+        <!-- Content Area -->
+        <div id="content-area">
+
+            <!-- ======================= -->
+            <!-- CMD Content (Default)   -->
+            <!-- ======================= -->
+            <div id="content-cmd">
+                <!-- File & Directory -->
+                <section class="mb-8">
+                    <h2 class="text-2xl font-semibold text-cyan-300 mb-4">File & Directory Management</h2>
+                    <div class="overflow-x-auto bg-gray-800 rounded-lg shadow-lg">
+                        <table class="w-full min-w-[700px]">
+                            <thead class="bg-gray-700 text-gray-300 uppercase text-sm">
+                                <tr>
+                                    <th class="py-3 px-4 text-left col-command">Command Example</th>
+                                    <th class="py-3 px-4 text-left col-desc">Description</th>
+                                    <th class="py-3 px-4 text-center col-action">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-700">
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>dir /b /s *.log</code></td>
+                                    <td class="py-3 px-4">Find all .log files recursively, showing bare path only.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>dir /a:d</code></td>
+                                    <td class="py-3 px-4">List only directories. (<code>/a:-d</code> for only files).</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>cd C:\Users\</code></td>
+                                    <td class="py-3 px-4">Change directory. Use <code>cd ..</code> to go up one level.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>mkdir NewFolder</code></td>
+                                    <td class="py-3 px-4">Create a new directory (folder).</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>rmdir /s /q OldFolder</code></td>
+                                    <td class="py-3 px-4">Remove a directory and its contents quietly (no prompt).</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                 <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>xcopy Source C:\Dest /s /e /i</code></td>
+                                    <td class="py-3 px-4">Copy directories and subdirectories, creating Dest if it doesn't exist.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>robocopy C:\Source D:\Dest /e /z /mir</code></td>
+                                    <td class="py-3 px-4">Mirror a directory (robust, restartable, deletes extra files in Dest).</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>ren old.txt new.txt</code></td>
+                                    <td class="py-3 px-4">Rename a file. (<code>rename</code>)</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>del /f /q file.txt</code></td>
+                                    <td class="py-3 px-4">Delete a file forcefully and quietly.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>echo "Hello" > new.txt</code></td>
+                                    <td class="py-3 px-4">Create a new file with text (overwrites).</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>echo "More" >> new.txt</code></td>
+                                    <td class="py-3 px-4">Append text to an existing file.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>mklink /D \MyLink C:\TargetFolder</code></td>
+                                    <td class="py-3 px-4">Create a symbolic link (directory link). (Run as Admin)</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>icacls C:\Folder /grant "MyUser":(OI)(CI)F</code></td>
+                                    <td class="py-3 px-4">Grant a user Full Control to a folder and sub-items. (Run as Admin)</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                 <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>icacls C:\Folder /remove "MyUser"</code></td>
+                                    <td class="py-3 px-4">Remove all permissions for a user from a folder. (Run as Admin)</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>takeown /f C:\Folder /r /d y</code></td>
+                                    <td class="py-3 px-4">Take ownership of a folder recursively. (Run as Admin)</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Text Manipulation -->
+                <section class="mb-8">
+                    <h2 class="text-2xl font-semibold text-cyan-300 mb-4">Text Manipulation</h2>
+                    <div class="overflow-x-auto bg-gray-800 rounded-lg shadow-lg">
+                        <table class="w-full min-w-[700px]">
+                            <thead class="bg-gray-700 text-gray-300 uppercase text-sm">
+                                <tr>
+                                    <th class="py-3 px-4 text-left col-command">Command Example</th>
+                                    <th class="py-3 px-4 text-left col-desc">Description</th>
+                                    <th class="py-3 px-4 text-center col-action">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-700">
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>findstr /i /c:"login failed" *.log</code></td>
+                                    <td class="py-3 px-4">Find text (case-insensitive) in multiple files.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>type log.txt | more</code></td>
+                                    <td class="py-3 px-4">Display file contents one page at a time.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Network -->
+                <section class="mb-8">
+                    <h2 class="text-2xl font-semibold text-cyan-300 mb-4">Network</h2>
+                    <div class="overflow-x-auto bg-gray-800 rounded-lg shadow-lg">
+                        <table class="w-full min-w-[700px]">
+                            <thead class="bg-gray-700 text-gray-300 uppercase text-sm">
+                                <tr>
+                                    <th class="py-3 px-4 text-left col-command">Command Example</th>
+                                    <th class="py-3 px-4 text-left col-desc">Description</th>
+                                    <th class="py-3 px-4 text-left col-action">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-700">
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>ipconfig /all</code></td>
+                                    <td class="py-3 px-4">Display all network adapter information.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>ipconfig /flushdns</code></td>
+                                    <td class="py-3 px-4">Clear the local DNS cache.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>ping google.com -t</code></td>
+                                    <td class="py-3 px-4">Test connectivity continuously until stopped (Ctrl+C).</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>tracert google.com</code></td>
+                                    <td class="py-3 px-4">Trace the network route to a host.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>netstat -anb</code></td>
+                                    <td class="py-3 px-4">Show connections and the executables using them. (Run as Admin)</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>nslookup google.com</code></td>
+                                    <td class="py-3 px-4">Query DNS for IP address information.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>arp -a</code></td>
+                                    <td class="py-3 px-4">Display the local ARP cache (IP to MAC address mapping).</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>route print -4</code></td>
+                                    <td class="py-3 px-4">Display the IPv4 routing table.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>net use Z: \\Server\Share /persistent:yes</code></td>
+                                    <td class="py-3 px-4">Map a network drive (Z:) to a share, making it persistent.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>net share MyShare=C:\Folder /grant:Everyone,READ</code></td>
+                                    <td class="py-3 px-4">Share a folder with a specific name and permissions.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>netsh wlan show profiles</code></td>
+                                    <td class="py-3 px-4">List all saved Wi-Fi profiles on the system.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>netsh wlan show profile name="MyWiFi" key=clear</code></td>
+                                    <td class="py-3 px-4">Show the password for a specific Wi-Fi profile. (Run as Admin)</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>netsh advfirewall firewall add rule name="Block-App" dir=out program="C:\app.exe" action=block</code></td>
+                                    <td class="py-3 px-4">Block a specific application from accessing the network. (Run as Admin)</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- System & Process -->
+                <section class="mb-8">
+                    <h2 class="text-2xl font-semibold text-cyan-300 mb-4">System & Process Management</h2>
+                    <div class="overflow-x-auto bg-gray-800 rounded-lg shadow-lg">
+                        <table class="w-full min-w-[700px]">
+                            <thead class="bg-gray-700 text-gray-300 uppercase text-sm">
+                                <tr>
+                                    <th class="py-3 px-4 text-left col-command">Command Example</th>
+                                    <th class="py-3 px-4 text-left col-desc">Description</th>
+                                    <th class="py-3 px-4 text-center col-action">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-700">
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>tasklist | find "chrome"</code></td>
+                                    <td class="py-3 px-4">Find a specific process.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>taskkill /F /IM notepad.exe</code></td>
+                                    <td class="py-3 px-4">Forcefully terminate a process by its image name.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>sc query Spooler</code></td>
+                                    <td class="py-3 px-4">Query the status of a service (e.g., Print Spooler).</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>sc stop Spooler</code></td>
+                                    <td class="py-3 px-4">Stop a service. (Run as Admin)</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>sc config "MyService" start= delayed-auto</code></td>
+                                    <td class="py-3 px-4">Change a service's start type (e.g., to delayed auto-start).</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>schtasks /query /fo LIST /v</code></td>
+                                    <td class="py-3 px-4">List all scheduled tasks in a verbose list format.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                 <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>schtasks /create /tn "MyTask" /tr "notepad.exe" /sc ONCE /st 23:00</code></td>
+                                    <td class="py-3 px-4">Create a new task to run notepad at 11:00 PM tonight.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>sfc /scannow</code></td>
+                                    <td class="py-3 px-4">System File Checker: Scans and repairs system files. (Run as Admin)</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>chkdsk C: /f</code></td>
+                                    <td class="py-3 px-4">Check disk for errors and fix them. (Run as Admin)</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>shutdown /r /t 0</code></td>
+                                    <td class="py-3 px-4">Restart the computer immediately.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>gpupdate /force</code></td>
+                                    <td class="py-3 px-4">Force an update of Group Policy settings.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>wmic product get name,version</code></td>
+                                    <td class="py-3 px-4">List installed software (can be slow). (Run as Admin)</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>wmic bios get serialnumber</code></td>
+                                    <td class="py-3 px-4">Get the computer's BIOS serial number. (Run as Admin)</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>driverquery /v</code></td>
+                                    <td class="py-3 px-4">List all installed device drivers (verbose).</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>powercfg /energy</code></td>
+                                    <td class="py-3 px-4">Generate a power efficiency report. (Run as Admin)</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>powercfg /lastwake</code></td>
+                                    <td class="py-3 px-4">Show what device or event last woke the PC from sleep.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- User Management -->
+                <section class="mb-8">
+                    <h2 class="text-2xl font-semibold text-cyan-300 mb-4">User Management (Run as Admin)</h2>
+                    <div class="overflow-x-auto bg-gray-800 rounded-lg shadow-lg">
+                        <table class="w-full min-w-[700px]">
+                            <thead class="bg-gray-700 text-gray-300 uppercase text-sm">
+                                <tr>
+                                    <th class="py-3 px-4 text-left col-command">Command Example</th>
+                                    <th class="py-3 px-4 text-left col-desc">Description</th>
+                                    <th class="py-3 px-4 text-center col-action">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-700">
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>net user NewUser Pa$$w0rd /add</code></td>
+                                    <td class="py-3 px-4">Create a new local user.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>net user OldUser /delete</code></td>
+                                    <td class="py-3 px-4">Delete a local user.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                 <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>net localgroup Administrators NewUser /add</code></td>
+                                    <td class="py-3 px-4">Add a user to the local Administrators group.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>net localgroup "MyGroup" /add</code></td>
+                                    <td class="py-3 px-4">Create a new local group.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Registry Management -->
+                <section class="mb-8">
+                    <h2 class="text-2xl font-semibold text-cyan-300 mb-4">Registry Management (Run as Admin)</h2>
+                    <div class="overflow-x-auto bg-gray-800 rounded-lg shadow-lg">
+                        <table class="w-full min-w-[700px]">
+                            <thead class="bg-gray-700 text-gray-300 uppercase text-sm">
+                                <tr>
+                                    <th class="py-3 px-4 text-left col-command">Command Example</th>
+                                    <th class="py-3 px-4 text-left col-desc">Description</th>
+                                    <th class="py-3 px-4 text-center col-action">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-700">
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>reg query HKLM\Software\Microsoft\Windows</code></td>
+                                    <td class="py-3 px-4">Query a registry key for its subkeys and values.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>reg add HKCU\Software\MyApp /v Version /t REG_SZ /d 1.0</code></td>
+                                    <td class="py-3 px-4">Add or update a registry value.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>reg delete HKCU\Software\MyApp /f</code></td>
+                                    <td class="py-3 px-4">Force delete a registry key and all its values.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>reg export HKCU\Software\MyApp C:\Backup.reg</code></td>
+                                    <td class="py-3 px-4">Export a registry key to a .reg file.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>reg import C:\Backup.reg</code></td>
+                                    <td class="py-3 px-4">Import a .reg file into the registry.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Disk Management -->
+                <section class="mb-8">
+                    <h2 class="text-2xl font-semibold text-cyan-300 mb-4">Disk Management (Run as Admin)</h2>
+                    <div class="overflow-x-auto bg-gray-800 rounded-lg shadow-lg">
+                        <table class="w-full min-w-[700px]">
+                            <thead class="bg-gray-700 text-gray-300 uppercase text-sm">
+                                <tr>
+                                    <th class="py-3 px-4 text-left col-command">Command Example</th>
+                                    <th class="py-3 px-4 text-left col-desc">Description</th>
+                                    <th class="py-3 px-4 text-center col-action">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-700">
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>diskpart</code></td>
+                                    <td class="py-3 px-4">Enter the interactive disk partitioning tool. (Sub-commands below)</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                 <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>(echo list disk) | diskpart</code></td>
+                                    <td class="py-3 px-4">List all disks (non-interactive example).</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                 <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>(echo select disk 1 & echo clean) | diskpart</code></td>
+                                    <td class="py-3 px-4">Select disk 1 and erase it. **DANGEROUS!**</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>format E: /fs:NTFS /q /v:MyData</code></td>
+                                    <td class="py-3 px-4">Quick format drive E: with NTFS and set label to "MyData".</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>label E: NewLabel</code></td>
+                                    <td class="py-3 px-4">Change the label of drive E:.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Batch Scripting Logic -->
+                <section class="mb-8">
+                    <h2 class="text-2xl font-semibold text-cyan-300 mb-4">Batch Scripting Logic</h2>
+                    <div class="overflow-x-auto bg-gray-800 rounded-lg shadow-lg">
+                        <table class="w-full min-w-[700px]">
+                            <thead class="bg-gray-700 text-gray-300 uppercase text-sm">
+                                <tr>
+                                    <th class="py-3 px-4 text-left col-command">Command Example</th>
+                                    <th class="py-3 px-4 text-left col-desc">Description</th>
+                                    <th class="py-3 px-4 text-center col-action">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-700">
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>@echo off</code></td>
+                                    <td class="py-3 px-4">Turn off command echoing in a script.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>set MY_VAR="Hello World"</code></td>
+                                    <td class="py-3 px-4">Set an environment variable for the session.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>echo %MY_VAR%</code></td>
+                                    <td class="py-3 px-4">Use (echo) a variable.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>if exist "file.txt" (echo "File exists!")</code></td>
+                                    <td class="py-3 px-4">Check if a file exists.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>if %ERRORLEVEL% NEQ 0 (echo "Command failed!")</code></td>
+                                    <td class="py-3 px-4">Check if the previous command failed.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>for /f "tokens=1,2" %a in (data.txt) do echo %a %b</code></td>
+                                    <td class="py-3 px-4">Loop through each line of a file, splitting it by spaces.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>call :myFunction</code></td>
+                                    <td class="py-3 px-4">Call a subroutine (function) within a batch file.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+            </div>
+
+            <!-- ======================= -->
+            <!-- Powershell Content (Hidden) -->
+            <!-- ======================= -->
+            <div id="content-ps" class="hidden">
+                <!-- File & Directory -->
+                <section class="mb-8">
+                    <h2 class="text-2xl font-semibold text-cyan-300 mb-4">File & Directory Management</h2>
+                    <div class="overflow-x-auto bg-gray-800 rounded-lg shadow-lg">
+                        <table class="w-full min-w-[700px]">
+                            <thead class="bg-gray-700 text-gray-300 uppercase text-sm">
+                                <tr>
+                                    <th class="py-3 px-4 text-left col-command">Command Example</th>
+                                    <th class="py-3 px-4 text-left col-desc">Description</th>
+                                    <th class="py-3 px-4 text-center col-action">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-700">
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>Get-ChildItem -Recurse -Filter "*.log" -File</code></td>
+                                    <td class="py-3 px-4">Find all .log files recursively. (Alias: <code>gci</code>, <code>ls</code>, <code>dir</code>)</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>Set-Location C:\Users\</code></td>
+                                    <td class="py-3 px-4">Change directory. (Alias: <code>sl</code>, <code>cd</code>)</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>New-Item -Path . -Name "NewFolder" -ItemType Directory</code></td>
+                                    <td class="py-3 px-4">Create a new directory.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>Remove-Item -Path .\OldFolder -Recurse -Force</code></td>
+                                    <td class="py-3 px-4">Remove a non-empty folder forcefully. (Alias: <code>ri</code>, <code>rm</code>)</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>Copy-Item -Path C:\Source -Destination D:\Dest -Recurse</code></td>
+                                    <td class="py-3 px-4">Copy an entire directory recursively. (Alias: <code>cpi</code>)</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>Rename-Item -Path .\old.txt -NewName new.txt</code></td>
+                                    <td class="py-3 px-4">Rename an item. (Alias: <code>rni</code>, <code>ren</code>)</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>Get-Content -Path .\log.txt -Tail 10</code></td>
+                                    <td class="py-3 px-4">Get the last 10 lines of a file. (Alias: <code>gc</code>)</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>"Hello" | Out-File -FilePath new.txt -Encoding utf8</code></td>
+                                    <td class="py-3 px-4">Create a new file with text (UTF-8 encoding).</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>Add-Content -Path .\log.txt -Value "New entry"</code></td>
+                                    <td class="py-3 px-4">Append text to an existing file (safer than <code>Out-File -Append</code>).</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>Compress-Archive -Path .\MyFolder -DestinationPath .\Archive.zip</code></td>
+                                    <td class="py-3 px-4">Create a .zip file from a folder.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>Expand-Archive -Path .\Archive.zip -DestinationPath .\Unzipped</code></td>
+                                    <td class="py-3 px-4">Extract a .zip file.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>Get-FileHash .\myfile.txt -Algorithm SHA256</code></td>
+                                    <td class="py-3 px-4">Calculate the hash (checksum) of a file.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>Get-Acl -Path C:\Folder | Format-List</code></td>
+                                    <td class="py-3 px-4">Get the security permissions (ACLs) for a folder.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>$acl = Get-Acl C:\Folder; $acl.SetOwner([System.Security.Principal.NTAccount]"Administrators")</code></td>
+                                    <td class="py-3 px-4">Set the owner of a folder (requires 2 steps). (Run as Admin)</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Text Manipulation -->
+                <section class="mb-8">
+                    <h2 class="text-2xl font-semibold text-cyan-300 mb-4">Text Manipulation & Data</h2>
+                    <div class="overflow-x-auto bg-gray-800 rounded-lg shadow-lg">
+                        <table class="w-full min-w-[700px]">
+                            <thead class="bg-gray-700 text-gray-300 uppercase text-sm">
+                                <tr>
+                                    <th class="py-3 px-4 text-left col-command">Command Example</th>
+                                    <th class="py-3 px-4 text-left col-desc">Description</th>
+                                    <th class="py-3 px-4 text-center col-action">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-700">
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>Select-String -Path .\*.log -Pattern "error"</code></td>
+                                    <td class="py-3 px-4">Find text in multiple files. (Alias: <code>sls</code>)</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>(gc file.txt) -replace "old", "new" | Out-File new.txt</code></td>
+                                    <td class="py-3 px-4">Find and replace text in a file, saving to a new file.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                 <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>Import-Csv -Path .\data.csv</code></td>
+                                    <td class="py-3 px-4">Read a CSV file and convert it to objects. (Alias: <code>ipcsv</code>)</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                 <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>Get-Process | Export-Csv -Path proc.csv -NoTypeInformation</code></td>
+                                    <td class="py-3 px-4">Export command output to a CSV file. (Alias: <code>epcsv</code>)</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>Get-Content .\data.json | ConvertFrom-Json</code></td>
+                                    <td class="py-3 px-4">Convert JSON text to a Powershell object.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>$myObject | ConvertTo-Json</code></td>
+                                    <td class="py-3 px-4">Convert a Powershell object to a JSON string.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>[xml]$doc = Get-Content .\data.xml; $doc.SelectNodes("/items/item")</code></td>
+                                    <td class="py-3 px-4">Read and parse an XML file, then query it with XPath.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Powershell Object Manipulation (The Pipeline) -->
+                <section class="mb-8">
+                    <h2 class="text-2xl font-semibold text-cyan-300 mb-4">Object Manipulation (The Pipeline)</h2>
+                    <div class="overflow-x-auto bg-gray-800 rounded-lg shadow-lg">
+                        <table class="w-full min-w-[700px]">
+                            <thead class="bg-gray-700 text-gray-300 uppercase text-sm">
+                                <tr>
+                                    <th class="py-3 px-4 text-left col-command">Command Example</th>
+                                    <th class="py-3 px-4 text-left col-desc">Description</th>
+                                    <th class="py-3 px-4 text-center col-action">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-700">
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>Get-Process | Where-Object { $_.CPU -gt 100 }</code></td>
+                                    <td class="py-3 px-4">Filter objects based on a property. (Alias: <code>where</code>, <code>?</code>)</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>Get-Process | Select-Object -Property Name, ID, CPU</code></td>
+                                    <td class="py-3 px-4">Select only specific properties from objects. (Alias: <code>select</code>)</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>Get-Process | Sort-Object -Property CPU -Descending</code></td>
+                                    <td class="py-3 px-4">Sort objects by a property. (Alias: <code>sort</code>)</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                 <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>Get-Service | Group-Object -Property Status</code></td>
+                                    <td class="py-3 px-4">Group objects based on a common property value. (Alias: <code>group</code>)</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                 <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>Get-Process | Measure-Object -Property WorkingSet -Sum -Average</code></td>
+                                    <td class="py-3 px-4">Calculate statistics (sum, avg, etc.) on object properties. (Alias: <code>measure</code>)</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>Get-Process | Select-Object -First 5</code></td>
+                                    <td class="py-3 px-4">Get the first 5 objects from the pipeline.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>Get-Process | Out-GridView</code></td>
+                                    <td class="py-3 px-4">Send pipeline output to an interactive, filterable grid window.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Network -->
+                <section class="mb-8">
+                    <h2 class="text-2xl font-semibold text-cyan-300 mb-4">Network</h2>
+                    <div class="overflow-x-auto bg-gray-800 rounded-lg shadow-lg">
+                        <table class="w-full min-w-[700px]">
+                            <thead class="bg-gray-700 text-gray-300 uppercase text-sm">
+                                <tr>
+                                    <th class="py-3 px-4 text-left col-command">Command Example</th>
+                                    <th class="py-3 px-4 text-left col-desc">Description</th>
+                                    <th class="py-3 px-4 text-center col-action">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-700">
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>Get-NetIPConfiguration</code></td>
+                                    <td class="py-3 px-4">Get detailed IP configuration (replaces <code>ipconfig</code>).</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>Get-NetConnectionProfile</code></td>
+                                    <td class="py-3 px-4">Show network profile (Public, Private, Domain).</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                 <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>Set-NetConnectionProfile -Name "Ethernet" -NetworkCategory Private</code></td>
+                                    <td class="py-3 px-4">Change a network's profile from Public to Private. (Run as Admin)</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>Clear-DnsClientCache</code></td>
+                                    <td class="py-3 px-4">Clear the local DNS cache.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>Test-Connection google.com -Count 2</code></td>
+                                    <td class="py-3 px-4">Ping a host 2 times. (replaces <code>ping</code>)</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                 <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>Test-NetConnection google.com -Port 443</code></td>
+                                    <td class="py-3 px-4">Test if a specific port is open on a remote host.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>Get-NetTCPConnection -State Listen</code></td>
+                                    <td class="py-3 px-4">List all listening ports (replaces <code>netstat -an</code>).</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>Resolve-DnsName google.com</code></td>
+                                    <td class="py-3 px-4">Query DNS information (replaces <code>nslookup</code>).</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                 <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>New-NetFirewallRule -DisplayName "Block-App" -Direction Outbound -Program "C:\app.exe" -Action Block</code></td>
+                                    <td class="py-3 px-4">Create a new firewall rule to block an app. (Run as Admin)</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>Invoke-WebRequest -Uri https://google.com</code></td>
+                                    <td class="py-3 px-4">Make a web request. (Alias: <code>iwr</code>, <code>curl</code>)</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>Invoke-RestMethod -Uri "api.example.com/data"</code></td>
+                                    <td class="py-3 px-4">Make a web request to an API, automatically parsing JSON.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- System & Process -->
+                <section class="mb-8">
+                    <h2 class="text-2xl font-semibold text-cyan-300 mb-4">System & Process Management</h2>
+                    <div class="overflow-x-auto bg-gray-800 rounded-lg shadow-lg">
+                        <table class="w-full min-w-[700px]">
+                            <thead class="bg-gray-700 text-gray-300 uppercase text-sm">
+                                <tr>
+                                    <th class="py-3 px-4 text-left col-command">Command Example</th>
+                                    <th class="py-3 px-4 text-left col-desc">Description</th>
+                                    <th class="py-3 px-4 text-center col-action">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-700">
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>Get-Process | Sort-Object -Property CPU -Descending</code></td>
+                                    <td class="py-3 px-4">List processes sorted by CPU usage. (Alias: <code>gps</code>)</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                 <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>Stop-Process -Name "notepad" -Force</code></td>
+                                    <td class="py-3 px-4">Forcefully terminate a process by its name. (Alias: <code>spps</code>)</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>Get-Service -Name "Spooler"</code></td>
+                                    <td class="py-3 px-4">Get information about a specific service. (Alias: <code>gsv</code>)</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>Start-Service -Name "Spooler"</code></td>
+                                    <td class="py-3 px-4">Start a service.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>Set-Service -Name "MyService" -StartupType DelayedAutomatic</code></td>
+                                    <td class="py-3 px-4">Change a service's startup type. (Run as Admin)</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                 <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>Get-ScheduledTask</code></td>
+                                    <td class="py-3 px-4">List all scheduled tasks on the system.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                 <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>Register-ScheduledTask -Action (New-ScheduledTaskAction -Execute "notepad.exe") -Trigger (New-ScheduledTaskTrigger -Daily -At 3am) -TaskName "MyTask"</code></td>
+                                    <td class="py-3 px-4">Create a new scheduled task. (Run as Admin)</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>Get-CimInstance -ClassName Win32_BIOS</code></td>
+                                    <td class="py-3 px-4">Get system information (e.g., BIOS). Replaces <code>wmic</code>.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>Get-WmiObject -Class Win32_Product | Select Name, Version</code></td>
+                                    <td class="py-3 px-4">List installed software (older, slow. <code>Get-CimInstance</code> is newer).</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>Get-WinEvent -LogName System -MaxEvents 10</code></td>
+                                    <td class="py-3 px-4">Get the last 10 events from the System event log.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>Get-EventLog -LogName Application -Newest 10</code></td>
+                                    <td class="py-3 px-4">Get last 10 events from Application log (older, easier syntax).</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>Start-Transcript -Path C:\Logs\MySession.log</code></td>
+                                    <td class="py-3 px-4">Start recording all console commands and output to a log file.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>Stop-Transcript</code></td>
+                                    <td class="py-3 px-4">Stop recording the console session.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>Start-Process "notepad.exe" -Verb RunAs</code></td>
+                                    <td class="py-3 px-4">Start a process as an Administrator.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>Get-Help Get-Process -Full</code></td>
+                                    <td class="py-3 px-4">Get detailed help for any command. (Alias: <code>help</code>, <code>man</code>)</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                 <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>Restart-Computer -Force</code></td>
+                                    <td class="py-3 px-4">Restart the computer immediately.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- User Management -->
+                <section class="mb-8">
+                    <h2 class="text-2xl font-semibold text-cyan-300 mb-4">User Management (Run as Admin)</h2>
+                    <div class="overflow-x-auto bg-gray-800 rounded-lg shadow-lg">
+                        <table class="w-full min-w-[700px]">
+                            <thead class="bg-gray-700 text-gray-300 uppercase text-sm">
+                                <tr>
+                                    <th class="py-3 px-4 text-left col-command">Command Example</th>
+                                    <th class="py-3 px-4 text-left col-desc">Description</th>
+                                    <th class="py-3 px-4 text-center col-action">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-700">
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>Get-LocalUser</code></td>
+                                    <td class="py-3 px-4">List local user accounts.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>New-LocalUser -Name "NewUser" -PasswordNeverExpires</code></td>
+                                    <td class="py-3 px-4">Create a new local user (will prompt for password).</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>Remove-LocalUser -Name "OldUser"</code></td>
+                                    <td class="py-3 px-4">Delete a local user.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>Get-LocalGroupMember -Group "Administrators"</code></td>
+                                    <td class="py-3 px-4">List all members of a local group.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                 <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>Add-LocalGroupMember -Group "Administrators" -Member "NewUser"</code></td>
+                                    <td class="py-3 px-4">Add a user to the local Administrators group.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>New-LocalGroup -Name "MyGroup"</code></td>
+                                    <td class="py-3 px-4">Create a new local group.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Active Directory -->
+                <section class="mb-8">
+                    <h2 class="text-2xl font-semibold text-cyan-300 mb-4">Active Directory (Requires RSAT-AD-Tools)</h2>
+                    <div class="overflow-x-auto bg-gray-800 rounded-lg shadow-lg">
+                        <table class="w-full min-w-[700px]">
+                            <thead class="bg-gray-700 text-gray-300 uppercase text-sm">
+                                <tr>
+                                    <th class="py-3 px-4 text-left col-command">Command Example</th>
+                                    <th class="py-3 px-4 text-left col-desc">Description</th>
+                                    <th class="py-3 px-4 text-center col-action">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-700">
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>Get-ADUser -Filter 'Name -like "John*"' -Properties *</code></td>
+                                    <td class="py-3 px-4">Find all AD users whose names start with "John" and show all properties.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>Set-ADUser -Identity "jdoe" -Description "New Role"</code></td>
+                                    <td class="py-3 px-4">Update the description for the user "jdoe".</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                 <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>Unlock-ADAccount -Identity "jdoe"</code></td>
+                                    <td class="py-3 px-4">Unlock a locked Active Directory user account.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>Get-ADComputer -Filter 'OperatingSystem -like "*Server*"'</code></td>
+                                    <td class="py-3 px-4">Find all computer objects running a Server OS.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>Get-ADGroupMember -Identity "Domain Admins" -Recursive</code></td>
+                                    <td class="py-3 px-4">Get all members of a group, including members of nested groups.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>Add-ADGroupMember -Identity "MyGroup" -Members "jdoe"</code></td>
+                                    <td class="py-3 px-4">Add user "jdoe" to "MyGroup".</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Registry Management -->
+                <section class="mb-8">
+                    <h2 class="text-2xl font-semibold text-cyan-300 mb-4">Registry Management (Run as Admin)</h2>
+                    <div class="overflow-x-auto bg-gray-800 rounded-lg shadow-lg">
+                        <table class="w-full min-w-[700px]">
+                            <thead class="bg-gray-700 text-gray-300 uppercase text-sm">
+                                <tr>
+                                    <th class="py-3 px-4 text-left col-command">Command Example</th>
+                                    <th class="py-3 px-4 text-left col-desc">Description</th>
+                                    <th class="py-3 px-4 text-center col-action">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-700">
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>Get-Item -Path "HKLM:\Software\Microsoft\Windows"</code></td>
+                                    <td class="py-3 px-4">List subkeys in a registry key.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>Get-ItemProperty -Path "HKCU:\Software\MyApp" -Name "Version"</code></td>
+                                    <td class="py-3 px-4">Get a specific value from a registry key.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>New-Item -Path "HKCU:\Software\NewApp"</code></td>
+                                    <td class="py-3 px-4">Create a new registry key.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>Set-ItemProperty -Path "HKCU:\Software\NewApp" -Name "Setting" -Value 123</code></td>
+                                    <td class="py-3 px-4">Create or update a specific value in a key.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>Remove-Item -Path "HKCU:\Software\NewApp" -Recurse</code></td>
+                                    <td class="py-3 px-4">Delete a registry key and its subkeys.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>Test-Path -Path "HKCU:\Software\NewApp"</code></td>
+                                    <td class="py-3 px-4">Check if a registry key exists (returns $true or $false).</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+                
+                <!-- Remote Management -->
+                <section class="mb-8">
+                    <h2 class="text-2xl font-semibold text-cyan-300 mb-4">Remote Management (PS Remoting)</h2>
+                    <div class="overflow-x-auto bg-gray-800 rounded-lg shadow-lg">
+                        <table class="w-full min-w-[700px]">
+                            <thead class="bg-gray-700 text-gray-300 uppercase text-sm">
+                                <tr>
+                                    <th class="py-3 px-4 text-left col-command">Command Example</th>
+                                    <th class="py-3 px-4 text-left col-desc">Description</th>
+                                    <th class="py-3 px-4 text-center col-action">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-700">
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>Enable-PSRemoting -Force</code></td>
+                                    <td class="py-3 px-4">Run once on remote PCs to allow remoting. (Run as Admin)</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>Enter-PSSession -ComputerName "RemotePC"</code></td>
+                                    <td class="py-3 px-4">Start an interactive session on a remote computer.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>Invoke-Command -ComputerName "RemotePC" -ScriptBlock { Get-Process }</code></td>
+                                    <td class="py-3 px-4">Run a single command or script block on a remote PC.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>$session = New-PSSession -ComputerName "Server1", "Server2"</code></td>
+                                    <td class="py-3 px-4">Create a persistent session to one or more remote PCs.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>Invoke-Command -Session $session -ScriptBlock { Get-Service "Spooler" }</code></td>
+                                    <td class="py-3 px-4">Run a command against all PCs in the persistent session.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>Remove-PSSession -Session $session</code></td>
+                                    <td class="py-3 px-4">Close and remove the persistent session.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Scripting Logic -->
+                <section class="mb-8">
+                    <h2 class="text-2xl font-semibold text-cyan-300 mb-4">Scripting Logic</h2>
+                    <div class="overflow-x-auto bg-gray-800 rounded-lg shadow-lg">
+                        <table class="w-full min-w-[700px]">
+                            <thead class="bg-gray-700 text-gray-300 uppercase text-sm">
+                                <tr>
+                                    <th class="py-3 px-4 text-left col-command">Command Example</th>
+                                    <th class="py-3 px-4 text-left col-desc">Description</th>
+                                    <th class="py-3 px-4 text-center col-action">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-700">
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>$myVar = "Hello"; Write-Host $myVar</code></td>
+                                    <td class="py-3 px-4">Set and use a variable.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>if ($myVar -eq "Hello") { Write-Host "Match" }</code></td>
+                                    <td class="py-3 px-4">Simple If statement. (<code>-eq</code>, <code>-ne</code>, <code>-gt</code>, <code>-lt</code>, <code>-like</code>)</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>Get-Process | ForEach-Object { Write-Host $_.Name }</code></td>
+                                    <td class="py-3 px-4">Loop over a collection of items. (Alias: <code>foreach</code>, <code>%</code>)</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>try { 1/0 } catch { Write-Warning "Error!" }</code></td>
+                                    <td class="py-3 px-4">Basic error handling block.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>function Get-Greeting { param($Name) "Hello, $Name" }</code></td>
+                                    <td class="py-3 px-4">Define a simple function with one parameter.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-mono text-cyan-400 break-words"><code>Get-Greeting -Name "World"</code></td>
+                                    <td class="py-3 px-4">Call the custom function defined above.</td>
+                                    <td class="py-3 px-4 text-center"><button class="copy-btn">Copy</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Message Box for copy notifications -->
+    <div id="copy-message" class="hidden fixed bottom-5 right-5 bg-green-500 text-white py-2 px-4 rounded-lg shadow-lg transition-all duration-300 opacity-0">
+        Copied to clipboard!
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const tabCmd = document.getElementById('tab-cmd');
+            const tabPs = document.getElementById('tab-ps');
+            const contentCmd = document.getElementById('content-cmd');
+            const contentPs = document.getElementById('content-ps');
+            const allCopyButtons = document.querySelectorAll('.copy-btn');
+            const copyMessage = document.getElementById('copy-message');
+
+            // --- Tab Switching Logic ---
+            function showTab(tabName) {
+                if (tabName === 'cmd') {
+                    // Show CMD content
+                    contentCmd.classList.remove('hidden');
+                    contentPs.classList.add('hidden');
+                    // Style CMD tab
+                    tabCmd.classList.add('tab-active');
+                    tabCmd.classList.remove('text-gray-500', 'hover:text-gray-300');
+                    // Unstyle PS tab
+                    tabPs.classList.remove('tab-active');
+                    tabPs.classList.add('text-gray-500', 'hover:text-gray-300');
+                } else if (tabName === 'ps') {
+                    // Show PS content
+                    contentPs.classList.remove('hidden');
+                    contentCmd.classList.add('hidden');
+                    // Style PS tab
+                    tabPs.classList.add('tab-active');
+                    tabPs.classList.remove('text-gray-500', 'hover:text-gray-300');
+                    // Unstyle CMD tab
+                    tabCmd.classList.remove('tab-active');
+                    tabCmd.classList.add('text-gray-500', 'hover:text-gray-300');
+                }
+            }
+
+            tabCmd.addEventListener('click', () => showTab('cmd'));
+            tabPs.addEventListener('click', () => showTab('ps'));
+
+            // --- Copy-to-Clipboard Logic ---
+            
+            // Apply default button styling
+            allCopyButtons.forEach(btn => {
+                btn.classList.add(
+                    'bg-cyan-600',
+                    'hover:bg-cyan-700',
+                    'text-white',
+                    'font-semibold',
+                    'py-1',
+                    'px-3',
+                    'rounded-lg',
+                    'text-sm',
+                    'transition-all',
+                    'duration-200',
+                    'focus:outline-none',
+                    'focus:ring-2',
+                    'focus:ring-cyan-400'
+                );
+            });
+
+            // Click event listener for all copy buttons
+            allCopyButtons.forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const btn = e.target;
+                    
+                    // Find the <code> element in the same row
+                    const commandText = btn.closest('tr').querySelector('code').innerText;
+
+                    // Use the clipboard fallback for iFrame compatibility
+                    try {
+                        const textArea = document.createElement('textarea');
+                        textArea.value = commandText;
+                        textArea.style.position = 'fixed'; // Prevent scrolling to bottom
+                        textArea.style.top = '0';
+                        textArea.style.left = '0';
+                        textArea.style.opacity = '0';
+                        document.body.appendChild(textArea);
+                        
+                        textArea.focus();
+                        textArea.select();
+                        
+                        document.execCommand('copy');
+                        document.body.removeChild(textArea);
+
+                        // Show visual feedback (non-blocking notification)
+                        copyMessage.innerText = 'Copied to clipboard!';
+                        copyMessage.classList.remove('hidden', 'opacity-0', 'bg-red-500');
+                        copyMessage.classList.add('bg-green-500', 'opacity-100');
+                        
+                        // Revert after 2 seconds
+                        setTimeout(() => {
+                            copyMessage.classList.add('opacity-0');
+                             setTimeout(() => {
+                                 copyMessage.classList.add('hidden');
+                             }, 300); // Wait for fade-out
+                        }, 2000);
+
+                    } catch (err) {
+                        console.error('Failed to copy text: ', err);
+                        // Handle error (e.g., show error message)
+                        copyMessage.innerText = 'Failed to copy!';
+                        copyMessage.classList.remove('hidden', 'opacity-0', 'bg-green-500');
+                        copyMessage.classList.add('bg-red-500', 'opacity-100');
+                       
+                        // Revert after 2 seconds
+                         setTimeout(() => {
+                            copyMessage.classList.add('opacity-0');
+                             setTimeout(() => {
+                                 copyMessage.classList.add('hidden');
+                             }, 300); // Wait for fade-out
+                        }, 2000);
+                    }
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>
+

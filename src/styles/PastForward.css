@@ -1,0 +1,451 @@
+/* Past Forward Styles */
+
+.pastForwardPage {
+  min-height: 100vh;
+  background: #000;
+  padding-top: 80px;
+  padding-bottom: 4rem;
+  position: relative;
+}
+
+.pastForwardHeader {
+  max-width: 1200px;
+  margin: 0 auto 3rem;
+  padding: 0 2rem;
+  text-align: center;
+}
+
+.pastForwardTitle {
+  font-size: 4rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: #fff;
+}
+
+.pastForwardTitleGradient {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.pastForwardSubtitle {
+  font-size: 1.25rem;
+  color: rgba(255, 255, 255, 0.7);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.pastForwardMain {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+/* Upload Screen */
+.pastForwardUpload {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+}
+
+.pastForwardUploadCard {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 4rem 3rem;
+  text-align: center;
+  max-width: 500px;
+}
+
+.pastForwardUploadIcon {
+  width: 4rem;
+  height: 4rem;
+  color: #667eea;
+  margin: 0 auto 1.5rem;
+}
+
+.pastForwardUploadTitle {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 1rem;
+}
+
+.pastForwardUploadText {
+  font-size: 1.125rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+.pastForwardUploadButton {
+  display: inline-block;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+  padding: 1rem 2.5rem;
+  border-radius: 12px;
+  font-size: 1.125rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.pastForwardUploadButton:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+}
+
+.pastForwardUploadInput {
+  display: none;
+}
+
+/* Preview Screen */
+.pastForwardPreview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+.pastForwardPreviewCard {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 2rem;
+  max-width: 500px;
+}
+
+.pastForwardPreviewImage {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+}
+
+.pastForwardPreviewCaption {
+  text-align: center;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.pastForwardPreviewActions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* Buttons */
+.pastForwardButtonPrimary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  font-size: 1.125rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.pastForwardButtonPrimary:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+}
+
+.pastForwardButtonPrimary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.pastForwardButtonSecondary {
+  background: rgba(255, 255, 255, 0.08);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  font-size: 1.125rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pastForwardButtonSecondary:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: scale(1.05);
+}
+
+/* Polaroid Cards */
+.polaroidCard {
+  width: 20rem;
+  background: linear-gradient(to bottom, #f5f5f5 0%, #e8e8e8 100%);
+  border-radius: 8px;
+  padding: 1rem;
+  padding-bottom: 4rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  position: relative;
+}
+
+.polaroidImageContainer {
+  width: 100%;
+  aspect-ratio: 1;
+  background: #1a1a1a;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.polaroidImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.8;
+  filter: sepia(1) contrast(0.8) brightness(0.8);
+  transition: all 4s ease-in-out;
+}
+
+.polaroidImageDeveloped {
+  opacity: 1;
+  filter: none;
+}
+
+.polaroidDevelopOverlay {
+  position: absolute;
+  inset: 0;
+  background: #3a322c;
+  z-index: 10;
+  transition: opacity 3.5s ease-out;
+  opacity: 1;
+}
+
+.polaroidDevelopOverlayDone {
+  opacity: 0;
+}
+
+.polaroidControls {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.polaroidCard:hover .polaroidControls {
+  opacity: 1;
+}
+
+.polaroidControlButton {
+  width: 2rem;
+  height: 2rem;
+  background: rgba(0, 0, 0, 0.6);
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.polaroidControlButton:hover {
+  background: rgba(0, 0, 0, 0.8);
+  transform: scale(1.1);
+}
+
+.polaroidControlIcon {
+  width: 1rem;
+  height: 1rem;
+  color: #fff;
+}
+
+.polaroidCaption {
+  position: absolute;
+  bottom: 1rem;
+  left: 1rem;
+  right: 1rem;
+  text-align: center;
+}
+
+.polaroidCaption p {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #000;
+  margin: 0;
+}
+
+.polaroidLoading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.polaroidSpinner {
+  width: 3rem;
+  height: 3rem;
+  border: 3px solid rgba(255, 255, 255, 0.2);
+  border-top-color: rgba(255, 255, 255, 0.6);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+.polaroidError {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  gap: 0.5rem;
+  padding: 1rem;
+}
+
+.polaroidErrorIcon {
+  width: 2.5rem;
+  height: 2.5rem;
+  color: #ff6b6b;
+}
+
+.polaroidErrorText {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.7);
+  text-align: center;
+}
+
+.polaroidPlaceholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  gap: 0.5rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.polaroidPlaceholderIcon {
+  width: 4rem;
+  height: 4rem;
+}
+
+.polaroidPlaceholder span {
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+/* Mobile Grid */
+.pastForwardMobileGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.polaroidWrapper {
+  display: flex;
+  justify-content: center;
+}
+
+/* Desktop Grid */
+.pastForwardDesktopGrid {
+  position: relative;
+  width: 100%;
+  height: 700px;
+  margin-bottom: 4rem;
+}
+
+.polaroidWrapperDesktop {
+  position: absolute;
+  cursor: grab;
+  transition: transform 0.3s ease;
+}
+
+.polaroidWrapperDesktop:active {
+  cursor: grabbing;
+}
+
+.polaroidWrapperDesktop:hover {
+  z-index: 10;
+  transform: scale(1.05) !important;
+}
+
+/* Results Actions */
+.pastForwardResultsActions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 2rem;
+}
+
+/* Animations */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .pastForwardDesktopGrid {
+    height: 900px;
+  }
+}
+
+@media (max-width: 768px) {
+  .pastForwardPage {
+    padding-top: 60px;
+  }
+
+  .pastForwardTitle {
+    font-size: 2.5rem;
+  }
+
+  .pastForwardSubtitle {
+    font-size: 1rem;
+  }
+
+  .pastForwardUploadCard {
+    padding: 3rem 2rem;
+  }
+
+  .pastForwardUploadTitle {
+    font-size: 1.5rem;
+  }
+
+  .pastForwardUploadText {
+    font-size: 1rem;
+  }
+
+  .polaroidCard {
+    width: 100%;
+    max-width: 20rem;
+  }
+
+  .polaroidControls {
+    opacity: 1; /* Always show on mobile */
+  }
+
+  .pastForwardButtonPrimary,
+  .pastForwardButtonSecondary {
+    font-size: 1rem;
+    padding: 0.875rem 1.5rem;
+  }
+}

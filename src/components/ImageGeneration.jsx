@@ -3,6 +3,7 @@ import { useAuth } from '../contexts/AuthContext'
 import { supabase } from '../lib/supabase/client'
 import { useNavigate } from 'react-router-dom'
 import { GoogleGenAI } from '@google/genai'
+import { checkUsageLimit, incrementUsage } from '../lib/usageTracking'
 import '../styles/ImageGeneration.css'
 
 const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY
@@ -37,6 +38,20 @@ export default function ImageGeneration() {
 
     if (!GEMINI_API_KEY) {
       setError('API key not configured. Please check your environment variables.')
+      return
+    }
+
+    // Check usage limit - verify user has enough remaining uses for all images
+    const usageCheck = await checkUsageLimit(user.id, 'generated_image')
+    if (!usageCheck.allowed) {
+      setError(usageCheck.message || 'You have reached your AI Image Generation limit for this month. Please upgrade your plan to continue.')
+      return
+    }
+
+    // Check if user has enough remaining uses for the requested number of images
+    const remainingUses = usageCheck.limit === -1 ? Infinity : usageCheck.limit - usageCheck.used
+    if (remainingUses < numImages && usageCheck.limit !== -1) {
+      setError(`You only have ${remainingUses} image generation${remainingUses === 1 ? '' : 's'} remaining this month. Please reduce the number of images or upgrade your plan.`)
       return
     }
 
@@ -81,6 +96,11 @@ export default function ImageGeneration() {
 
       // Save all generated images to Supabase
       await saveImagesToDatabase(images)
+
+      // Increment usage for each generated image
+      for (let i = 0; i < images.length; i++) {
+        await incrementUsage(user.id, 'generated_image')
+      }
 
       setProgress(100)
       setGeneratedImages(images)

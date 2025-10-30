@@ -59,12 +59,37 @@ export default function SubscriptionManager() {
   }
 
   const tier = SUBSCRIPTION_TIERS[subscription.tier_id] || SUBSCRIPTION_TIERS.free
-  const photosLimit = tier.photosPerMonth === -1 ? '∞' : tier.photosPerMonth
-  const gifsLimit = tier.gifsPerMonth === -1 ? '∞' : tier.gifsPerMonth
+
+  // Helper function to format limits
+  const formatLimit = (limit) => limit === -1 ? '∞' : limit
+
+  // Helper function to calculate percentage
+  const calcPercentage = (used, limit) => limit === -1 ? 0 : (used / limit) * 100
+
+  // Usage data
+  const photosLimit = formatLimit(tier.photosPerMonth)
+  const gifsLimit = formatLimit(tier.gifsPerMonth)
+  const fitcheckLimit = formatLimit(tier.fitcheckPerMonth)
+  const codrawingLimit = formatLimit(tier.codrawingPerMonth)
+  const pastforwardLimit = formatLimit(tier.pastforwardPerMonth)
+  const generatedImagesLimit = formatLimit(tier.generatedImagesPerMonth)
+  const pixshopLimit = formatLimit(tier.pixshopPerMonth)
+
   const photosUsed = usage?.photos_used || 0
   const gifsUsed = usage?.gifs_used || 0
-  const photosPercentage = tier.photosPerMonth === -1 ? 0 : (photosUsed / tier.photosPerMonth) * 100
-  const gifsPercentage = tier.gifsPerMonth === -1 ? 0 : (gifsUsed / tier.gifsPerMonth) * 100
+  const fitcheckUsed = usage?.fitcheck_used || 0
+  const codrawingUsed = usage?.codrawing_used || 0
+  const pastforwardUsed = usage?.pastforward_used || 0
+  const generatedImagesUsed = usage?.generated_images_used || 0
+  const pixshopUsed = usage?.pixshop_used || 0
+
+  const photosPercentage = calcPercentage(photosUsed, tier.photosPerMonth)
+  const gifsPercentage = calcPercentage(gifsUsed, tier.gifsPerMonth)
+  const fitcheckPercentage = calcPercentage(fitcheckUsed, tier.fitcheckPerMonth)
+  const codrawingPercentage = calcPercentage(codrawingUsed, tier.codrawingPerMonth)
+  const pastforwardPercentage = calcPercentage(pastforwardUsed, tier.pastforwardPerMonth)
+  const generatedImagesPercentage = calcPercentage(generatedImagesUsed, tier.generatedImagesPerMonth)
+  const pixshopPercentage = calcPercentage(pixshopUsed, tier.pixshopPerMonth)
 
   return (
     <div className="subscriptionManager">
@@ -105,6 +130,71 @@ export default function SubscriptionManager() {
               <div
                 className="progressFill"
                 style={{ width: `${Math.min(gifsPercentage, 100)}%` }}
+              />
+            </div>
+          </div>
+
+          <div className="usageStat">
+            <div className="statHeader">
+              <span>👔 FitCheck</span>
+              <span>{fitcheckUsed} / {fitcheckLimit}</span>
+            </div>
+            <div className="progressBar">
+              <div
+                className="progressFill"
+                style={{ width: `${Math.min(fitcheckPercentage, 100)}%` }}
+              />
+            </div>
+          </div>
+
+          <div className="usageStat">
+            <div className="statHeader">
+              <span>🎨 Co-Drawing</span>
+              <span>{codrawingUsed} / {codrawingLimit}</span>
+            </div>
+            <div className="progressBar">
+              <div
+                className="progressFill"
+                style={{ width: `${Math.min(codrawingPercentage, 100)}%` }}
+              />
+            </div>
+          </div>
+
+          <div className="usageStat">
+            <div className="statHeader">
+              <span>⏰ Past Forward</span>
+              <span>{pastforwardUsed} / {pastforwardLimit}</span>
+            </div>
+            <div className="progressBar">
+              <div
+                className="progressFill"
+                style={{ width: `${Math.min(pastforwardPercentage, 100)}%` }}
+              />
+            </div>
+          </div>
+
+          <div className="usageStat">
+            <div className="statHeader">
+              <span>✨ AI Generated</span>
+              <span>{generatedImagesUsed} / {generatedImagesLimit}</span>
+            </div>
+            <div className="progressBar">
+              <div
+                className="progressFill"
+                style={{ width: `${Math.min(generatedImagesPercentage, 100)}%` }}
+              />
+            </div>
+          </div>
+
+          <div className="usageStat">
+            <div className="statHeader">
+              <span>🖼️ PixShop</span>
+              <span>{pixshopUsed} / {pixshopLimit}</span>
+            </div>
+            <div className="progressBar">
+              <div
+                className="progressFill"
+                style={{ width: `${Math.min(pixshopPercentage, 100)}%` }}
               />
             </div>
           </div>
